@@ -65,6 +65,7 @@ public class RecordingActivity extends ActionBarActivity {
     private Utils utils;
     private Handler handler;
     private int counter = 0;
+    private String length_of_record="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,6 +246,7 @@ public class RecordingActivity extends ActionBarActivity {
 
     private void stopRecord() {
         if (isRecording) {
+            length_of_record = "00:"+counter;
             counter = 0;
             mediaRecorder.stop();
             mediaRecorder.release();
@@ -266,7 +268,6 @@ public class RecordingActivity extends ActionBarActivity {
             handler.postDelayed(this,1000);
             if(counter == 60){
                 stopRecord();
-                counter = 0;
             }
         }
     };

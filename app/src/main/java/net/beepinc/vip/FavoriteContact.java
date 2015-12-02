@@ -304,7 +304,7 @@ public class FavoriteContact extends Fragment implements favorites_adapters.Clic
         ad.setButton("CALL" , new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
+                Intent intent = new Intent(Intent.ACTION_CALL);
                 intent.setData(Uri.parse("tel: "+phone));
                 startActivity(intent);
             }
@@ -338,20 +338,6 @@ public class FavoriteContact extends Fragment implements favorites_adapters.Clic
             Toast.makeText(getActivity(), "No Internet Connection!", Toast.LENGTH_LONG).show();
             if(swipeRefreshLayout.isRefreshing())
                 swipeRefreshLayout.setRefreshing(false);
-        }
-    }
-
-
-    private class GetAllUsersTask extends AsyncTask<GetApiConnector, Long, JSONArray> {
-
-        @Override
-        protected JSONArray doInBackground(GetApiConnector... params) {
-            return params[0].GetAllUsers();
-        }
-
-        @Override
-        protected void onPostExecute(JSONArray jsonArray) {
-            //setCustomAdapter(jsonArray);
         }
     }
 
