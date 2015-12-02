@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">VIP</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_signup">Signup</string>
+    <string name="title_activity_loginview">Loginview</string>
+    <string name="copy_right"><i>copyright © 2015 BIP Inc.</i></string>
+    <string name="prom">Select a Category</string>
+    <string name="logo_name"><b>VIP</b></string>
+
+    <string-array name="category">
+        <item>Default</item>
+        <item>Student</item>
+        <item>Single</item>
+        <item>Married</item>
+    </string-array>
+    <string-array name="questions">
+        <item>Default</item>
+        <item>Student</item>
+        <item>Single</item>
+        <item>Married</item>
+    </string-array>
+    <string-array name="mtabs">
+        <item>Recent Posts</item>
+        <item>My Posts</item>
+    </string-array>
+
+    <integer-array name="images">
+        <item>@drawable/avatar_default</item>
+        <item>@drawable/avatar_default</item>
+        <item>@drawable/avatar_default</item>
+        <item>@drawable/avatar_default</item>
+    </integer-array>
+
+    <string name="title_activity_main"><b>VIP</b></string>
+    <string name="title_activity_update"><b>VIP - Profile</b></string>
+    <string name="error_timeout">No Internet Connection</string>
+    <string name="error_auth">Authentication Failed</string>
+    <string name="error_server">Server Error</string>
+    <string name="error_network">Network Connection Failed</string>
+    <string name="error_parse">Parsing Failed</string>
+    <string name="title_activity_image_preview">ImagePreview</string>
+    <string name="action_share">Share</string>
+    <string name="action_download">Download</string>
+    <string name="title_activity_recording">Record Your Voice</string>
+    <string name="title_activity_comment">Comments</string>
+    <string name="prom2">select a question</string>
+    <string name="title_activity_forgot_password">ForgotPassword</string>
+    <string name="title_activity_reset_password">ResetPassword</string>
+    <string name="title_activity_favorite_contacts">FavoriteContacts</string>
+
+</resources>

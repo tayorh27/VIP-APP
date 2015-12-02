@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="8dp"
+    card_view:cardCornerRadius="4dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <TextView
+        android:id="@+id/custom_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="username"
+        android:textColor="#00695c"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:typeface="sans"
+        android:paddingLeft="10dp"/>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="#ff0acca1"
+            android:layout_marginTop="3dp"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal"
+        android:layout_marginTop="40dp">
+
+        <!-- ListRow Left sied Thumbnail image @drawable/list_selector -->
+
+        <LinearLayout
+            android:id="@+id/thumbnail"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="5dip"
+            android:background="#fff">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/custom_recentpost_dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@drawable/avatar_default"
+                android:layout_gravity="center_vertical"
+                app:civ_border_width="1dp"
+                app:civ_border_color="#00796b"/>
+        </LinearLayout>
+
+        <!-- Title Of Song -->
+
+        <TextView
+            android:id="@+id/custom_recentpost_text"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/thumbnail"
+            android:layout_toRightOf="@+id/thumbnail"
+            android:text="caption"
+            android:textColor="#00695c"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:typeface="sans"
+            android:paddingLeft="10dp"/>
+
+        <!-- Artist Name -->
+
+        <Button
+            android:id="@+id/recent_press"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:tag="play"
+            android:background="@drawable/play_icon"
+            android:layout_below="@id/custom_recentpost_text"
+            android:layout_marginTop="1dip"
+            android:layout_toRightOf="@+id/thumbnail"
+            android:paddingTop="15dp"
+            android:paddingLeft="10dp"/>
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:id="@+id/custom_recentpost_subtext"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/custom_recentpost_text"
+            android:layout_marginTop="1dip"
+            android:layout_toRightOf="@+id/recent_press"
+            android:paddingTop="15dp"
+            android:paddingLeft="10dp" />
+
+        <!-- Rightend Duration #ff0acca1 -->
+
+        <TextView
+            android:id="@+id/custom_recentpost_time"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignRight="@id/custom_favorite_text"
+            android:layout_marginRight="5dip"
+            android:gravity="right"
+            android:text="5:45"
+            android:textColor="#00796b"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/download"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/cloud_down_icon"/>
+
+        <TextView
+            android:id="@+id/custom_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignRight="@id/recent_press"
+            android:layout_below="@id/custom_recentpost_text"
+            android:layout_marginRight="5dip"
+            android:gravity="right"
+            android:text="loading..."
+            android:textColor="#00796b"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/custom_likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/recent_press"
+            android:layout_below="@id/custom_recentpost_subtext"
+            android:paddingTop="5dp"
+            android:gravity="right"
+            android:text="0 likes"
+            android:textColor="#000"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/custom_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/custom_recentpost_subtext"
+            android:layout_toRightOf="@+id/custom_likes"
+            android:paddingTop="5dp"
+            android:gravity="right"
+            android:text="0 comments"
+            android:paddingLeft="20dp"
+            android:textColor="#00796b"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/custom_reposted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/custom_recentpost_subtext"
+            android:layout_toRightOf="@+id/custom_comments"
+            android:paddingTop="5dp"
+            android:gravity="right"
+            android:text="repost"
+            android:paddingLeft="20dp"
+            android:textColor="#00796b"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+
+
+        <!-- Rightend Arrow -->
+
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

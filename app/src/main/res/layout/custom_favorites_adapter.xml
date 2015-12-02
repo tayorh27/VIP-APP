@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:background="@drawable/btn_selector"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:layout_margin="10dp">
+
+    <!--<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <net.beepinc.vip.RoundedImageView
+            android:id="@+id/custom_favorite_dp"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp"
+            android:src="@drawable/avatar_default" />
+
+        <TextView
+            android:id="@+id/custom_favorite_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp"
+            android:text="username"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_gravity="end"
+            android:background="#ff0acca1"
+            android:padding="10dp"/>
+    </LinearLayout>-->
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal" >
+
+        <!-- ListRow Left sied Thumbnail image @drawable/list_selector -->
+
+        <LinearLayout
+            android:id="@+id/thumbnail"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="5dip"
+            android:background="#fff">
+
+            <!--<net.beepinc.vip.RoundedImageView
+                android:id="@+id/custom_favorite_dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/avatar_default" />-->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/custom_favorite_dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:src="@drawable/avatar_default"
+                android:layout_gravity="center_vertical"
+                app:civ_border_width="1dp"
+                app:civ_border_color="#00796b"/>
+        </LinearLayout>
+
+        <!-- Title Of Song -->
+
+        <TextView
+            android:id="@+id/custom_favorite_text"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/thumbnail"
+            android:layout_toRightOf="@+id/thumbnail"
+            android:text="username"
+            android:textColor="#00695c"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:typeface="sans"
+            android:paddingLeft="10dp"/>
+
+        <!-- Artist Name -->
+
+        <TextView
+            android:id="@+id/custom_favorite_subtext"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/custom_favorite_text"
+            android:layout_marginTop="1dip"
+            android:layout_toRightOf="@+id/thumbnail"
+            android:text="Just gona stand there and ..."
+            android:textColor="#00796b"
+            android:textSize="15sp"
+            android:paddingTop="15dp"
+            android:paddingLeft="10dp"/>
+
+        <!-- Rightend Duration #ff0acca1 -->
+
+        <TextView
+            android:id="@+id/custom_favorite_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignRight="@id/custom_favorite_text"
+            android:layout_marginRight="5dip"
+            android:gravity="right"
+            android:text="5:45"
+            android:textColor="#00796b"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <!--<View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_below="@+id/custom_favorite_subtext"
+            android:background="#ff0acca1"
+            android:layout_marginLeft="86dp"
+            android:layout_marginTop="3dp"/>-->
+
+        <!-- Rightend Arrow -->
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>

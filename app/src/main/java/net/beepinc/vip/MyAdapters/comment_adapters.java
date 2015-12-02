@@ -78,11 +78,11 @@ User user  = userLocalStore.getLoggedUser();
 
         String web_url = "http://www.gisanrinadetayo.comuf.com/images/";
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/vip-profile-pictures/");
-        File file = new File(path, user.image);
+        File file = new File(path, current.image);
         if (file.exists()){
             holder.imageView.setImageBitmap(BitmapFactory.decodeFile(file.toString()));
         }else{
-            String getRealImageName = Uri.encode(user.image);
+            String getRealImageName = Uri.encode(current.image);
             imageLoader.get(web_url+getRealImageName, new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
