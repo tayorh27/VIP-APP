@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.Loginview;
 import net.beepinc.vip.R;
 import net.beepinc.vip.Signup;
@@ -102,7 +103,7 @@ public class ResetPassword extends ActionBarActivity implements View.OnClickList
         progressDialog.setMessage("resetting password");
         progressDialog.show();
         String password = et_cp.getText().toString();
-        String web_url = "http://gisanrinadetayo.comuf.com/update_files/updatePassword.php?id="+g_id+"&password="+password;
+        String web_url = AppConfig.web_url+"update_files/updatePassword.php?id="+g_id+"&password="+password;
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(web_url, new Response.Listener<JSONObject>() {
             @Override

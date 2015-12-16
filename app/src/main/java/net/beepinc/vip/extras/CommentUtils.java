@@ -2,6 +2,7 @@ package net.beepinc.vip.extras;
 
 import com.android.volley.RequestQueue;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.Information.comment_information;
 import net.beepinc.vip.jsonComment.Parser;
 import net.beepinc.vip.jsonComment.Requestor;
@@ -21,7 +22,7 @@ public class CommentUtils {
 
     }
 
-    public static final String web_url = "http://www.gisanrinadetayo.comuf.com/php_fetch/FetchCommentData.php";
+    public static final String web_url = AppConfig.web_url+"php_fetch/FetchCommentData.php";
 
     public ArrayList<comment_information> loadRecentComment(RequestQueue requestQueue){
 

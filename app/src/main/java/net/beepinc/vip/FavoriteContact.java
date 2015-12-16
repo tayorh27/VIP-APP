@@ -99,7 +99,7 @@ public class FavoriteContact extends Fragment implements favorites_adapters.Clic
 
     private VolleySingleton volleySingleton;
     private RequestQueue requestQueue;
-    private String URL_FAV = "http://gisanrinadetayo.comuf.com/FetchUserData.php";
+    private String URL_FAV = AppConfig.web_url+"FetchUserData.php";
     private JSONObject object;
     private ArrayList<favorites_information> customList = new ArrayList<>();
 
@@ -264,7 +264,7 @@ public class FavoriteContact extends Fragment implements favorites_adapters.Clic
     }
 
     public void bitmpa_from_web(String image_name) {
-        String serverUrl = "http://www.gisanrinadetayo.comuf.com/images/" + image_name;
+        String serverUrl = AppConfig.web_url+"images/" + image_name;
         try {
             new AsyncTask<String, Void, Bitmap>() {
 

@@ -2,6 +2,7 @@ package net.beepinc.vip.extras;
 
 import com.android.volley.RequestQueue;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.Information.favorites_information;
 import net.beepinc.vip.MyApplication;
 import net.beepinc.vip.json.Parser;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  */
 public class FavoritesUtils {
 
-    private static final String  FAV_URL = "http://gisanrinadetayo.comuf.com/FetchUserDatas.php";
+    private static final String  FAV_URL = AppConfig.web_url+"FetchUserDatas.php";
 
     public static ArrayList<favorites_information> loadFavoritesList(RequestQueue requestQueue) {
 

@@ -98,7 +98,7 @@ public class UpdateActivity extends ActionBarActivity {
 
     String setCategory = "";
     String setQuestion = "";
-    private String web_url = "http://www.gisanrinadetayo.comuf.com/images/";
+    private String web_url = AppConfig.web_url+"images/";
 
     private RequestQueue requestQueue;
     TextInputLayout tu, tm;
@@ -309,7 +309,7 @@ public class UpdateActivity extends ActionBarActivity {
     }
 
     private int uploadFile(String picturePath) {
-        String upLoadServerUri = "http://gisanrinadetayo.comuf.com/upload_media.php";
+        String upLoadServerUri = AppConfig.web_url+"upload_media.php";
         String filename = picturePath;
 
         HttpURLConnection conn = null;
@@ -527,7 +527,7 @@ public class UpdateActivity extends ActionBarActivity {
         final String finalNew_sq = new_sq;
         final String finalNew_sa = new_sa;
 
-        final String web_url_update = "http://gisanrinadetayo.comuf.com/update.php?id="+Id+"&username="+finalNew_username+"&mobile="+finalNew_mobile+"&password="+finalNew_password+"&category="+finalNew_category+"&image="+finalNew_image+"&security_question="+finalNew_sq+"&security_answer="+finalNew_sa;
+        final String web_url_update = AppConfig.web_url+"update.php?id="+Id+"&username="+finalNew_username+"&mobile="+finalNew_mobile+"&password="+finalNew_password+"&category="+finalNew_category+"&image="+finalNew_image+"&security_question="+finalNew_sq+"&security_answer="+finalNew_sa;
 
         StringRequest stringRequest = new StringRequest(web_url_update, new Response.Listener<String>() {
             @Override

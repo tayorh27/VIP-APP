@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.widget.Toast;
 
+import net.beepinc.vip.AppConfig;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,7 +21,7 @@ import java.net.URLConnection;
  */
 public class Utils {
     private boolean isWrite = false, isAvail = false;
-    private String web_url = "http://www.gisanrinadetayo.comuf.com/voicenotes/";
+    private String web_url = AppConfig.web_url+"voicenotes/";
     private Context context;
 
     public Utils(Context context){

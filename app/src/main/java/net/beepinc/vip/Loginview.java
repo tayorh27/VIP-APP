@@ -191,7 +191,7 @@ public class Loginview extends ActionBarActivity {
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Validating user");
         progressDialog.show();
-        String web_url = "http://gisanrinadetayo.comuf.com/update_files/FetchSecurityAnswer.php?username="+username;
+        String web_url = AppConfig.web_url+"update_files/FetchSecurityAnswer.php?username="+username;
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(web_url, new Response.Listener<JSONArray>() {
             @Override
@@ -246,7 +246,7 @@ public class Loginview extends ActionBarActivity {
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Logging user in");
         progressDialog.show();
-        String web_url = "http://gisanrinadetayo.comuf.com/FetchUserData.php?username="+gUser;
+        String web_url = AppConfig.web_url+"FetchUserData.php?username="+gUser;
 
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(web_url, new Response.Listener<JSONArray>() {
             @Override

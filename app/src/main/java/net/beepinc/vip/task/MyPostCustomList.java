@@ -13,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.Information.mypost_information;
 import net.beepinc.vip.MyApplication;
 import net.beepinc.vip.User;
@@ -39,7 +40,7 @@ public class MyPostCustomList {
 
     private String caption, notes, image, mobile, username, time, up;
     private Context context;
-    private String web_URL = "http://gisanrinadetayo.comuf.com/php_files/upload_voice_database.php";
+    private String web_URL = AppConfig.web_url+"php_files/upload_voice_database.php";
 
     private JSONObject object;
     private String outputPath;
@@ -93,7 +94,7 @@ public class MyPostCustomList {
 
     public void UpdateCurrentVoiceNote() {
 
-        String web_url_uv = "http://gisanrinadetayo.comuf.com/update_files/updateVoicenote.php?notes="+notes+"&uploaded=full";
+        String web_url_uv = AppConfig.web_url+"update_files/updateVoicenote.php?notes="+notes+"&uploaded=full";
 
         StringRequest stringRequest = new StringRequest(web_url_uv, new Response.Listener<String>() {
             @Override
@@ -221,7 +222,7 @@ public class MyPostCustomList {
 
     private void UpdateCurrentVoiceNoteForRetry(final int id) {
 
-        String web_url_uv = "http://gisanrinadetayo.comuf.com/update_files/updateVoicenote.php?notes="+notes+"&uploaded=full";
+        String web_url_uv = AppConfig.web_url+"update_files/updateVoicenote.php?notes="+notes+"&uploaded=full";
 
         StringRequest stringRequest = new StringRequest(web_url_uv, new Response.Listener<String>() {
             @Override

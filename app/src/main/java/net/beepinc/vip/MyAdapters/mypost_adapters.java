@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.Information.mypost_information;
 import net.beepinc.vip.MyApplication;
 import net.beepinc.vip.R;
@@ -52,7 +53,7 @@ public class mypost_adapters extends RecyclerView.Adapter<mypost_adapters.MyPost
     private VolleySingleton volleySingleton;
     private ImageLoader imageLoader;
     private UserLocalStore userLocalStore;
-    private String imageUrl = "http://gisanrinadetayo.comuf.com/images/";
+    private String imageUrl = AppConfig.web_url+"images/";
 
     public mypost_adapters(Context context) {
         this.context = context;
@@ -202,7 +203,7 @@ public class mypost_adapters extends RecyclerView.Adapter<mypost_adapters.MyPost
 
                     if(!file.exists()){
                         Toast.makeText(context,"file does not exist on sdcard. checking web...",Toast.LENGTH_LONG).show();
-                        play_music = "http://www.gisanrinadetayo.comuf.com/voicenotes/"+current.voicenote;
+                        play_music = AppConfig.web_url+"voicenotes/"+current.voicenote;
                     }
 
                     if (text.contentEquals("play")) {

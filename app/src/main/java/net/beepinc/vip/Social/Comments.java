@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.User;
 import net.beepinc.vip.UserLocalStore;
 import net.beepinc.vip.generalUsage.GlobalUse;
@@ -36,7 +37,7 @@ public class Comments {
     private VolleySingleton volleySingleton;
     private RequestQueue requestQueue;
     private String post, image, mobile, username, comment;
-    private static final String web_url = "http://www.gisanrinadetayo.comuf.com/php_files/upload_comment.php";
+    private static final String web_url = AppConfig.web_url+"php_files/upload_comment.php";
     private Context context;
     private EditText editText;
     private ProgressBar progressBar;
@@ -111,7 +112,7 @@ public class Comments {
 
     private void updateVoiceNoteNumberofComments(){
 
-        String url = "http://gisanrinadetayo.comuf.com/commentNlikes/fetchCommentNumber.php?notes="+post;
+        String url = AppConfig.web_url+"commentNlikes/fetchCommentNumber.php?notes="+post;
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url,new Response.Listener<JSONArray>() {
             @Override
@@ -137,7 +138,7 @@ public class Comments {
     }
 
     private void updateVoicenoteCommentsTotal(int newNumberofcomments) {
-        String url = "http://gisanrinadetayo.comuf.com/commentNlikes/updateCommentNumber.php?notes="+post+"&number_of_comments="+newNumberofcomments;
+        String url = AppConfig.web_url+"commentNlikes/updateCommentNumber.php?notes="+post+"&number_of_comments="+newNumberofcomments;
 
         StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override

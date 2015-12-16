@@ -2,6 +2,7 @@ package net.beepinc.vip.SocialExtras;
 
 import com.android.volley.RequestQueue;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.Social.FetchLike;
 import net.beepinc.vip.jsonComment.Requestor;
 
@@ -21,7 +22,7 @@ public class LikeUtils {
         this.current_post = get_current_post;
     }
 
-    public static final String web_url = "http://www.gisanrinadetayo.comuf.com/php_fetch/FetchLikeData.php";
+    public static final String web_url = AppConfig.web_url+"php_fetch/FetchLikeData.php";
 
     public ArrayList<String> loadLikes(RequestQueue requestQueue){
 

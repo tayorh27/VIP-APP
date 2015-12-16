@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.network.VolleySingleton;
 
 import org.json.JSONArray;
@@ -25,7 +26,7 @@ public class FetchComment {
     private VolleySingleton volleySingleton;
     private RequestQueue requestQueue;
     private JSONObject object = null;
-    private String web_url = "http://www.gisanrinadetayo.comuf.com/php_fetch/FetchCommentData.php";
+    private String web_url = AppConfig.web_url+"php_fetch/FetchCommentData.php";
 
 
 

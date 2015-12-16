@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.MyAdapters.recentposts_adapters;
 import net.beepinc.vip.network.VolleySingleton;
 
@@ -28,7 +29,7 @@ public class FetchLike {
     private RequestQueue requestQueue;
 
     private JSONObject object = null;
-    private String web_url = "http://www.gisanrinadetayo.comuf.com/php_fetch/FetchLikeData.php";
+    private String web_url = AppConfig.web_url+"php_fetch/FetchLikeData.php";
     //private recentposts_adapters.RecentAdapter
 
 

@@ -88,7 +88,7 @@ public class MyPostDatabase {
     }
 
     public int getLastId(){
-        int id = 0;
+        int id = 1;
         String[] columns = {
                 FavHelper.COLUMN_UID,
                 FavHelper.COLUMN_CAPTION,
@@ -100,7 +100,7 @@ public class MyPostDatabase {
                 FavHelper.COLUMN_TIME
         };
         Cursor cursor = mDabtabase.query(FavHelper.TABLE_NAME_MYPOST, columns, null, null, null, null, null);
-        if (cursor != null) {
+        if (cursor != null && cursor.moveToFirst()) {
             cursor.moveToLast();
             id = cursor.getInt(0);
             //cursor.close();

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.telephony.PhoneNumberUtils;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.Information.favorites_information;
 import net.beepinc.vip.Information.recent_post_information;
 import net.beepinc.vip.MyApplication;
@@ -72,7 +73,7 @@ public class Parser {
         //caption, voicenote, image, mobile, username, time,id;
         ArrayList<recent_post_information> customData = new ArrayList<>();
 
-        String serverUrl = "http://gisanrinadetayo.comuf.com/images/";
+        String serverUrl = AppConfig.web_url+"images/";
         List<String> customCaption = new ArrayList<>();
         List<String> customVoicenote = new ArrayList<>();
         List<String> customImage = new ArrayList<>();

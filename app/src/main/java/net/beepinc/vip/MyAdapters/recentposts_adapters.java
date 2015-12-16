@@ -28,6 +28,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.ImagePreview;
 import net.beepinc.vip.Information.mypost_information;
 import net.beepinc.vip.Information.recent_post_information;
@@ -97,7 +98,7 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
 
         if(current.uploaded.contentEquals("full")) {
 
-            String web_url = "http://www.gisanrinadetayo.comuf.com/images/";
+            String web_url = AppConfig.web_url+"images/";
             User user = userLocalStore.getLoggedUser();
 
             //new TaskLoadNumberOfComments(this, current.voicenote).execute();
@@ -189,7 +190,7 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
 
     private String getMediaPath(String vn) {
         String get_path = "";
-        String web_url = "http://www.gisanrinadetayo.comuf.com/voicenotes/" + vn;
+        String web_url = AppConfig.web_url+"voicenotes/" + vn;
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC + "/vip-recent-voicenotes/");
         File file = new File(path, vn);
         if (file.exists()) {
@@ -320,7 +321,7 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
 
         private String getMediaPath(String vn) {
             String get_path = "";
-            String web_url = "http://www.gisanrinadetayo.comuf.com/voicenotes/" + vn;
+            String web_url = AppConfig.web_url+"voicenotes/" + vn;
             File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC + "/vip-recent-voicenotes/");
             File file = new File(path, vn);
             if (file.exists()) {
@@ -391,7 +392,7 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
 
         private void displayDP() {
             recent_post_information current = informations.get(getPosition());
-            String web_url = "http://www.gisanrinadetayo.comuf.com/images/";
+            String web_url = AppConfig.web_url+"images/";
             BitmapDrawable bmd = (BitmapDrawable) imageView.getDrawable();
             Bitmap bitmap = bmd.getBitmap();
             String url = current.image;

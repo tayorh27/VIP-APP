@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import net.beepinc.vip.AppConfig;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -34,7 +36,7 @@ public class Uploadings {
         byte[] buffer;
         int maxBufferSize = 1*1024*1024;
         String responseFromServer = "";
-        String urlString = "http://gisanrinadetayo.comuf.com/upload_voice.php";
+        String urlString = AppConfig.web_url+"upload_voice.php";
         try
         {
             //------------------ CLIENT REQUEST
@@ -106,7 +108,7 @@ public class Uploadings {
 
     public int uploadFile(Context context, String picturePath) {
         this.context = context;
-        String upLoadServerUri = "http://gisanrinadetayo.comuf.com/upload_voice.php";
+        String upLoadServerUri = AppConfig.web_url+"upload_voice.php";
         String filename = picturePath;
 
         HttpURLConnection conn = null;

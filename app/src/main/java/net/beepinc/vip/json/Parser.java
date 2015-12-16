@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.telephony.PhoneNumberUtils;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.Information.favorites_information;
 import net.beepinc.vip.MyApplication;
 import net.beepinc.vip.User;
@@ -74,7 +75,7 @@ public class Parser {
 
         ArrayList<favorites_information> customData = new ArrayList<>();
 
-        String serverUrl = "http://gisanrinadetayo.comuf.com/images/";
+        String serverUrl = AppConfig.web_url+"images/";
         List<String> customUsername = new ArrayList<>();
         List<String> customMobile = new ArrayList<>();
         List<String> customImage = new ArrayList<>();

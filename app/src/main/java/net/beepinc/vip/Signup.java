@@ -267,7 +267,7 @@ public class Signup extends ActionBarActivity {
     }
 
     private int uploadFile(String picturePath) {
-        String upLoadServerUri = "http://gisanrinadetayo.comuf.com/upload_media.php";
+        String upLoadServerUri = AppConfig.web_url+"upload_media.php";
         String filename = picturePath;
 
         HttpURLConnection conn = null;
@@ -354,7 +354,7 @@ public class Signup extends ActionBarActivity {
         pdd.setCancelable(false);
         pdd.show();
 
-        String web_url_reg = "http://gisanrinadetayo.comuf.com/Register.php";
+        String web_url_reg = AppConfig.web_url+"Register.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, web_url_reg, new Response.Listener<String>() {
             @Override

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.ImagePreview;
 import net.beepinc.vip.Information.comment_information;
 import net.beepinc.vip.R;
@@ -76,7 +77,7 @@ User user  = userLocalStore.getLoggedUser();
         long milli = getTime.getTime();
         holder.textView2.setText(TimeUtils.setAgo(milli));
 
-        String web_url = "http://www.gisanrinadetayo.comuf.com/images/";
+        String web_url = AppConfig.web_url+"images/";
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/vip-profile-pictures/");
         File file = new File(path, current.image);
         if (file.exists()){
@@ -127,7 +128,7 @@ User user  = userLocalStore.getLoggedUser();
 
         private void displayDP() {
             comment_information current = information.get(getPosition());
-            String web_url = "http://www.gisanrinadetayo.comuf.com/images/";
+            String web_url = AppConfig.web_url+"images/";
             BitmapDrawable bmd = (BitmapDrawable) imageView.getDrawable();
             Bitmap bitmap = bmd.getBitmap();
             String url = current.image;

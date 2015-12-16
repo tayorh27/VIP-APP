@@ -13,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.R;
 import net.beepinc.vip.generalUsage.GlobalUse;
 import net.beepinc.vip.network.VolleySingleton;
@@ -32,7 +33,7 @@ public class Likes {
     private VolleySingleton volleySingleton;
     private RequestQueue requestQueue;
     private String post, image, mobile, username, like_status, like_value;
-    private static final String web_url = "http://www.gisanrinadetayo.comuf.com/php_files/upload_like.php";
+    private static final String web_url = AppConfig.web_url+"php_files/upload_like.php";
     private Context context;
     private TextView textView;
 
@@ -97,7 +98,7 @@ public class Likes {
 
     private void updateVoiceNoteNumberofLikes(){
 
-        String url = "http://gisanrinadetayo.comuf.com/commentNlikes/fetchCommentNumber.php?notes="+post;
+        String url = AppConfig.web_url+"commentNlikes/fetchCommentNumber.php?notes="+post;
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url,new Response.Listener<JSONArray>() {
             @Override
@@ -129,7 +130,7 @@ public class Likes {
 
     private void updateVoiceNoteLikeUsers(String newLikeUsers) {
 
-        String url = "http://gisanrinadetayo.comuf.com/commentNlikes/updateLikeUser.php?notes="+post+"&likeUsers="+newLikeUsers;
+        String url = AppConfig.web_url+"commentNlikes/updateLikeUser.php?notes="+post+"&likeUsers="+newLikeUsers;
 
         StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override
@@ -150,7 +151,7 @@ public class Likes {
 
     private void updateVoicenoteCommentsTotal(int newNumberoflikes) {
 
-        String url = "http://gisanrinadetayo.comuf.com/commentNlikes/updateLikeNumber.php?notes="+post+"&number_of_likes="+newNumberoflikes;
+        String url = AppConfig.web_url+"commentNlikes/updateLikeNumber.php?notes="+post+"&number_of_likes="+newNumberoflikes;
 
         StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override

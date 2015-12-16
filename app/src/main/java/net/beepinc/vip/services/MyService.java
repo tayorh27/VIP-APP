@@ -10,6 +10,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.RequestFuture;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.Information.favorites_information;
 import net.beepinc.vip.Information.mypost_information;
 import net.beepinc.vip.MyApplication;
@@ -139,7 +140,7 @@ public class MyService extends JobService implements MyPostsLoadedListener {
                 return null;
             }
 
-            String serverUrl = "http://gisanrinadetayo.comuf.com/images/";
+            String serverUrl = AppConfig.web_url+"images/";
 
             performContactTask();
             List<String> customUsername = new ArrayList<>();

@@ -1,5 +1,6 @@
 package net.beepinc.vip.jsonComment;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.Information.comment_information;
 
 import org.json.JSONArray;
@@ -19,7 +20,7 @@ public class Parser {
 
         ArrayList<comment_information> customData = new ArrayList<>();
 
-        String serverUrl = "http://gisanrinadetayo.comuf.com/images/";
+        String serverUrl = AppConfig.web_url+"images/";
         List<String> customPost = new ArrayList<>();
         List<String> customImage = new ArrayList<>();
         List<String> customMobile = new ArrayList<>();

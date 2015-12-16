@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import net.beepinc.vip.AppConfig;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -28,7 +30,7 @@ public class UploadVoice extends AsyncTask<Void, Void, Void> {
     Context context;
     AlertDialog alertDialog;
     private String caption, notes, image, mobile, username;
-    private String web_URL = "http://gisanrinadetayo.comuf.com/php_files/upload_voice_database.php";
+    private String web_URL = AppConfig.web_url+"php_files/upload_voice_database.php";
     private int CONNECTION_TIMEOUT = 1000 * 15;
     public boolean isSent = false;
 
