@@ -16,8 +16,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import com.vboards.VacantBoards.R;
-import com.example.cameratoblob.app.AppConfig;
+import net.beepinc.vip.R;
+import net.beepinc.vip.app.AppConfig;
 
 /**
  * Created by Ravi on 01/06/15.
@@ -43,9 +43,9 @@ public class NotificationUtils {
 
         if (isAppIsInBackground(mContext)) {
             // notification icon
-            int icon =  R.drawable.vboardsicon;
+            int icon =  R.drawable.icon_launcher;
 
-            int smallIcon = R.drawable.vboardsicon;
+            int smallIcon = R.drawable.icon_launcher;
 
             int mNotificationId = AppConfig.NOTIFICATION_ID;
 
