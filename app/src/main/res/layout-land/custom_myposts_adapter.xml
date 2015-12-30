@@ -53,7 +53,7 @@
             android:layout_toRightOf="@+id/thumbnail"
             android:text="caption"
             android:textColor="#00695c"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:typeface="sans"
             android:paddingLeft="10dp"/>

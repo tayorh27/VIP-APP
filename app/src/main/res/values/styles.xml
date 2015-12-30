@@ -3,6 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
+        <item name="android:textViewStyle">@style/AppTheme.widget.TextView</item>
+        <item name="android:typeface">serif</item>
     </style>
 
     <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -14,8 +16,15 @@
         <item name="android:textColorSecondary">@color/secondary_text</item>
         <item name="android:icon">@color/icons</item>
         <item name="android:divider">@color/divider</item>
+        <item name="android:textViewStyle">@style/AppTheme.widget.TextView</item>
+        <item name="android:typeface">serif</item>
 
     </style>
+
+    <style name="AppTheme.widget.TextView" parent="android:Widget.Holo.Light.TextView">
+        <item name="fontPath">fonts/gasmaskwarriors.ttf</item>
+    </style>
+
 
    <!-- <style name="TextAppearance.App.TextInputLayout" parent="TextAppearance.">
 

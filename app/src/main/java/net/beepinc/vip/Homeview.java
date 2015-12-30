@@ -2,9 +2,11 @@ package net.beepinc.vip;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -14,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class Homeview extends ActionBarActivity {
@@ -26,10 +30,14 @@ public class Homeview extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homeview);
+        AppConfig.ReplaceDefaultFont(Homeview.this,"SERIF","avenir_light.ttf");
 
         next = (ImageView)findViewById(R.id.logo);
         signup = (Button)findViewById(R.id.btn_signup);
         login = (Button)findViewById(R.id.btn_login);
+
+        Typeface typeface=Typeface.createFromAsset(getAssets(),"avenir_light.ttf");
+        signup.setTypeface(typeface);
 
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.marvelironman);
         next.setImageBitmap(icon);
@@ -73,6 +81,11 @@ public class Homeview extends ActionBarActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override

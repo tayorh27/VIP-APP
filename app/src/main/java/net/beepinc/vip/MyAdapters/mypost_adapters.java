@@ -54,19 +54,23 @@ public class mypost_adapters extends RecyclerView.Adapter<mypost_adapters.MyPost
     private ImageLoader imageLoader;
     private UserLocalStore userLocalStore;
     private String imageUrl = AppConfig.web_url+"images/";
+    private LongClickListener lc;
+    private mClickListener clickListener;
+    private RecyclerView recyclerView;
 
-    public mypost_adapters(Context context) {
+    public mypost_adapters(Context context,LongClickListener lc,mClickListener clickListener,RecyclerView recyclerView) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         volleySingleton = VolleySingleton.getInstance();
         imageLoader = volleySingleton.getImageLoader();
         userLocalStore = new UserLocalStore(context);
-
+        this.lc = lc;
+        this.clickListener = clickListener;
+        this.recyclerView = recyclerView;
     }
 
     public void setList(ArrayList<mypost_information> setPosts) {
         this.posts = setPosts;
-        //notifyItemRangeChanged(0, setPosts.size());
         notifyDataSetChanged();
     }
 
@@ -163,6 +167,14 @@ public class mypost_adapters extends RecyclerView.Adapter<mypost_adapters.MyPost
         return posts.size();
     }
 
+    public interface LongClickListener{
+        public void onLongClickListener(View view,int position);
+    }
+
+    public interface mClickListener{
+        public void onClickListener(View view,int position);
+    }
+
 
     class MyPostAdapter extends RecyclerView.ViewHolder {
 
@@ -235,8 +247,8 @@ public class mypost_adapters extends RecyclerView.Adapter<mypost_adapters.MyPost
                         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.play_icon);
                         Drawable d = new BitmapDrawable(bitmap);
                         button.setBackground(d);
-                        progressBar.setProgress((int)startTime);
                         mediaPlayer.pause();
+                        progressBar.setProgress(mediaPlayer.getCurrentPosition());
                     }
 
 
@@ -245,20 +257,8 @@ public class mypost_adapters extends RecyclerView.Adapter<mypost_adapters.MyPost
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mypost_information current = posts.get(getPosition());
-                    Bitmap bmd = BitmapFactory.decodeResource(context.getResources(), R.drawable.timer_icon);
-                    Drawable d = new BitmapDrawable(bmd);
-
-                    File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC + "/vip-voicenotes/");
-                    File file = new File(path,current.voicenote);
-                    if(file.exists()) {
-                        if (response.getDrawable() == d) {
-                            Toast.makeText(context, "retrying", Toast.LENGTH_LONG).show();
-                            MyPostCustomList postCustomList = new MyPostCustomList(context, current.caption, current.voicenote, current.image, current.mobile, current.username, current.time, file.toString(), "full");
-                            postCustomList.doUploadFileForRetry(current.get_id);
-                        }
-                    }else{
-                        Toast.makeText(context, "voicenote does not exist on sdcard", Toast.LENGTH_LONG).show();
+                    if(clickListener != null){
+                        clickListener.onClickListener(v,getPosition());
                     }
                 }
             });
@@ -266,25 +266,9 @@ public class mypost_adapters extends RecyclerView.Adapter<mypost_adapters.MyPost
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    final mypost_information current = posts.get(getPosition());
-                    final AlertDialog ad = new AlertDialog.Builder(context).create();
-                    ad.setTitle("Delete Alert");
-                    ad.setMessage("Are you sure you want to remove this voicenote?");
-                    ad.setButton("YES", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            MyApplication.getWriteableDatabaseForMyPosts().deleteDatabase(current.get_id);
-                            //Toast.makeText(context, "deleted successfully\nswipe to refresh", Toast.LENGTH_LONG).show();
-                            ad.dismiss();
-                        }
-                    });
-                    ad.setButton2("NO", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ad.dismiss();
-                        }
-                    });
-                    ad.show();
+                    if(lc != null) {
+                        lc.onLongClickListener(v, getPosition());
+                    }
                     return true;
                 }
             });

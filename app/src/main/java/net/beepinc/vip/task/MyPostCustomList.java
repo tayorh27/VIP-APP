@@ -2,6 +2,8 @@ package net.beepinc.vip.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -18,7 +20,9 @@ import net.beepinc.vip.Information.mypost_information;
 import net.beepinc.vip.MyApplication;
 import net.beepinc.vip.User;
 import net.beepinc.vip.UserLocalStore;
+import net.beepinc.vip.generalUsage.GlobalUse;
 import net.beepinc.vip.generalUsage.Uploadings;
+import net.beepinc.vip.json.Utils;
 import net.beepinc.vip.network.VolleySingleton;
 
 import org.json.JSONException;
@@ -38,7 +42,7 @@ public class MyPostCustomList {
     private RequestQueue requestQueue;
     private Uploadings uploadings;
 
-    private String caption, notes, image, mobile, username, time, up;
+    private String caption, notes, image, mobile, username, time, up,duration;
     private Context context;
     private String web_URL = AppConfig.web_url+"php_files/upload_voice_database.php";
 
@@ -48,7 +52,7 @@ public class MyPostCustomList {
     String currentDate = date.toLocaleString();
     private UserLocalStore userLocalStore;
 
-    public MyPostCustomList(Context context, String cap, String vn, String img, String mob, String usern,String mTime, String outPath, String upload) {
+    public MyPostCustomList(Context context, String cap, String vn, String img, String mob, String usern,String mTime, String outPath, String upload,String duration) {
         volleySingleton = VolleySingleton.getInstance();
         requestQueue = volleySingleton.getRequestQueue();
         this.context = context;
@@ -60,6 +64,7 @@ public class MyPostCustomList {
         this.time = mTime;
         this.outputPath = outPath;
         this.up = upload;
+        this.duration = duration;
         uploadings = new Uploadings();
         userLocalStore = new UserLocalStore(context);
 
@@ -114,7 +119,7 @@ public class MyPostCustomList {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                GlobalUse.handleVolleyError(error,context);
             }
         }) ;
         requestQueue.add(stringRequest);
@@ -151,6 +156,7 @@ public class MyPostCustomList {
                 params.put("username", username);
                 params.put("time",currentDate);
                 params.put("uploaded", up);
+                params.put("duration",duration);
                 return params;
             }
         };
@@ -158,18 +164,20 @@ public class MyPostCustomList {
         requestQueue.add(stringRequest);
     }
 
-    public void Upload_to_Database_repost() {
+    public void Upload_to_Database_repost(final RecyclerView recyclerView, final String nUsername) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, web_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("Done", "Posted to database " + username + " about to start upload " + response.toString());
-                Toast.makeText(context,"Voicenote posted", Toast.LENGTH_LONG).show();
+                Snackbar.make(recyclerView,"Voicenote posted",Snackbar.LENGTH_LONG).show();
                 //User user = userLocalStore.getLoggedUser();
+
+                new Utils(context).DownloadVoiceToSDcard(notes);
 
                 ArrayList<mypost_information> customData = new ArrayList<>();
                 int fk = MyApplication.getWriteableDatabaseForMyPosts().getLastId();
                 int id = fk+1;
-                mypost_information current1 = new mypost_information(id,caption, notes, image, mobile, username, "done_icon", currentDate,"partial");
+                mypost_information current1 = new mypost_information(id,caption, notes, image, mobile, nUsername, "done_icon", currentDate,"partial");
                 customData.add(current1);
                 MyApplication.getWriteableDatabaseForMyPosts().insertMyPost(customData, false);
             }
@@ -192,9 +200,10 @@ public class MyPostCustomList {
                 params.put("notes", notes);
                 params.put("image", image);
                 params.put("mobile", mobile);
-                params.put("username", username);
+                params.put("username", nUsername);
                 params.put("time",currentDate);
                 params.put("uploaded", up);
+                params.put("duration",duration);
                 return params;
             }
         };
@@ -205,14 +214,17 @@ public class MyPostCustomList {
 
 
 
-    public void doUploadFileForRetry(final int id) {
+    public void doUploadFileForRetry(final int id, final RecyclerView recyclerView) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 int response = uploadings.uploadFile(context, outputPath);
                 if (response == 200) {
-                    UpdateCurrentVoiceNoteForRetry(id);
+                    UpdateCurrentVoiceNoteForRetry(id,recyclerView);
                     Log.e("upload", "database updated");
+                    //delete later
+                    //MyApplication.getWriteableDatabaseForMyPosts().updateDatabase(id, "done_icon");
+                    //Snackbar.make(recyclerView,"Voicenote posted",Snackbar.LENGTH_LONG).show();
                 } else {
 
                 }
@@ -220,7 +232,7 @@ public class MyPostCustomList {
         }).start();
     }
 
-    private void UpdateCurrentVoiceNoteForRetry(final int id) {
+    private void UpdateCurrentVoiceNoteForRetry(final int id, final RecyclerView recyclerView) {
 
         String web_url_uv = AppConfig.web_url+"update_files/updateVoicenote.php?notes="+notes+"&uploaded=full";
 
@@ -232,17 +244,20 @@ public class MyPostCustomList {
                     JSONObject object1 = new JSONObject(response);
                     success = object1.getInt("success");
                     if(success == 1){
+                        Log.e("UPLOAD_EXTERNAL--------:::::::", "external database updated");
                         //int fk = MyApplication.getWriteableDatabaseForMyPosts().getLastId();
                         MyApplication.getWriteableDatabaseForMyPosts().updateDatabase(id, "done_icon");
+                        Snackbar.make(recyclerView,"Voicenote posted",Snackbar.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Log.e("UPLOAD_EXTERNAL--------:::::::", e.toString());
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Log.e("UPLOAD_EXTERNAL--------:::::::", error.toString());
             }
         }) ;
         requestQueue.add(stringRequest);

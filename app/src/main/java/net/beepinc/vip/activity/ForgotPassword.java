@@ -1,6 +1,7 @@
 package net.beepinc.vip.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -12,9 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.Loginview;
 import net.beepinc.vip.R;
 import net.beepinc.vip.Signup;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ForgotPassword extends ActionBarActivity implements View.OnClickListener{
 
@@ -28,9 +32,16 @@ public class ForgotPassword extends ActionBarActivity implements View.OnClickLis
     ProgressDialog progressDialog;
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
+
+        AppConfig.ReplaceDefaultFont(ForgotPassword.this, "DEFAULT", "avenir_light.ttf");
 
         tu = (TextInputLayout) findViewById(R.id.EUsername);
         tp = (TextInputLayout) findViewById(R.id.Epassword);

@@ -12,6 +12,15 @@
         android:layout_height="wrap_content"
         android:hint="Caption this voice"
         android:layout_marginTop="20dp"
+        android:layout_marginRight="32dp"
+        android:layout_below="@+id/display"/>
+    <ImageView
+        android:id="@+id/clip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/upload"
+        android:layout_alignRight="@+id/caption"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/display"/>
     <Button
         android:id="@+id/btn_speak"

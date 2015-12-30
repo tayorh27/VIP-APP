@@ -4,9 +4,23 @@
     tools:context="net.beepinc.vip.MainActivity">
 
     <item
+        android:id="@+id/action_search"
+        android:title="search"
+        android:orderInCategory="100"
+        android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_favorites"
+        android:title="Favorites"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_star_rate_white_18dp"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/favorites"
         android:orderInCategory="100"
-        android:title="Favorite Contacts"
+        android:title="Contacts"
         app:showAsAction="never" />
 
     <item

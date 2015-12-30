@@ -1,6 +1,7 @@
 package net.beepinc.vip.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -26,6 +27,8 @@ import net.beepinc.vip.network.VolleySingleton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class ResetPassword extends ActionBarActivity implements View.OnClickListener{
 
     TextInputLayout tu, tp;
@@ -39,9 +42,16 @@ public class ResetPassword extends ActionBarActivity implements View.OnClickList
     RequestQueue requestQueue;
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
+
+        AppConfig.ReplaceDefaultFont(ResetPassword.this, "DEFAULT", "avenir_light.ttf");
 
         volleySingleton = VolleySingleton.getInstance();
         requestQueue = volleySingleton.getRequestQueue();

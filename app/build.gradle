@@ -29,4 +29,5 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'me.tatarka.support:jobscheduler:0.1.1'
     compile 'de.hdodenhof:circleimageview:2.0.0'
+    compile 'uk.co.chrisjenx:calligraphy:2.1.0'
 }

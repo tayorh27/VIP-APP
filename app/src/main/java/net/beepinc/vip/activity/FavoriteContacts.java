@@ -1,6 +1,7 @@
 package net.beepinc.vip.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.Information.favorites_information;
 import net.beepinc.vip.InternetChecking;
 import net.beepinc.vip.MyAdapters.favorites_adapters;
@@ -28,6 +30,8 @@ import net.beepinc.vip.callback.FavoritesLoadedListener;
 import net.beepinc.vip.task.TaskLoadFavorites;
 
 import java.util.ArrayList;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class FavoriteContacts extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener, favorites_adapters.Clicklistener, FavoritesLoadedListener {
 
@@ -48,6 +52,8 @@ public class FavoriteContacts extends ActionBarActivity implements SwipeRefreshL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite_contacts);
+
+        replaceFont();
 
         recyclerView = (RecyclerView) findViewById(R.id.favoriteView);
         recyclerView.setLayoutManager(new LinearLayoutManager(FavoriteContacts.this));
@@ -81,6 +87,15 @@ public class FavoriteContacts extends ActionBarActivity implements SwipeRefreshL
         }
     }
 
+    private void replaceFont(){
+        AppConfig.ReplaceDefaultFont(FavoriteContacts.this,"DEFAULT","avenir_light.ttf");
+    }
+
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -128,28 +143,32 @@ public class FavoriteContacts extends ActionBarActivity implements SwipeRefreshL
 
     @Override
     public void ItemClick(View view, int Position) {
-        AlertDialog ad = new AlertDialog.Builder(FavoriteContacts.this).create();
-        String name = customList.get(Position).title;
-        final String phone = customList.get(Position).subtitle;
-        ad.setTitle(name);
-        ad.setMessage(phone);
-        ad.setButton("CALL" , new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel: " + phone));
-                startActivity(intent);
-            }
-        });
-        ad.setButton2("SMS", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("sms: "+phone));
-                startActivity(intent);
-            }
-        });
-        ad.show();
+        try {
+            AlertDialog ad = new AlertDialog.Builder(FavoriteContacts.this).create();
+            String name = customList.get(Position).title;
+            final String phone = customList.get(Position).subtitle;
+            ad.setTitle(name);
+            ad.setMessage(phone);
+            ad.setButton("CALL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel: " + phone));
+                    startActivity(intent);
+                }
+            });
+            ad.setButton2("SMS", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("sms: " + phone));
+                    startActivity(intent);
+                }
+            });
+            ad.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

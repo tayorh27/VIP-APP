@@ -60,6 +60,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 
 public class Signup extends ActionBarActivity {
 
@@ -85,6 +87,11 @@ public class Signup extends ActionBarActivity {
     public  boolean isWrite = false, isAvail = false;
     private VolleySingleton volleySingleton;
     private RequestQueue requestQueue;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

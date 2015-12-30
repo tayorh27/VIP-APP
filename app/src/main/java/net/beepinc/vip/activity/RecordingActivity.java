@@ -1,6 +1,10 @@
 package net.beepinc.vip.activity;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -9,6 +13,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -19,9 +24,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.Async.UploadVoice;
 import net.beepinc.vip.Information.mypost_information;
 import net.beepinc.vip.MyAdapters.mypost_adapters;
@@ -36,10 +43,14 @@ import net.beepinc.vip.task.MyPostCustomList;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class RecordingActivity extends ActionBarActivity {
 
@@ -48,6 +59,7 @@ public class RecordingActivity extends ActionBarActivity {
     FloatingActionButton fab;
     FloatingActionButton fab1;
     TextView displayText;
+    ImageView recordAttach;
 
     private MediaRecorder mediaRecorder;
     private String outputPath;
@@ -66,11 +78,22 @@ public class RecordingActivity extends ActionBarActivity {
     private Handler handler;
     private int counter = 0;
     private String length_of_record="";
+    private static final int FILE_SELECT_CODE =0;
+    String setDuration = "";
+    double _length = 0;
+    boolean hasUpload = false;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recording);
+
+        AppConfig.ReplaceDefaultFont(RecordingActivity.this, "DEFAULT", "avenir_light.ttf");
 
         //getSupportActionBar().hide();
         utils = new Utils();
@@ -81,11 +104,12 @@ public class RecordingActivity extends ActionBarActivity {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab1 = (FloatingActionButton) findViewById(R.id.fab_cancel);
         displayText = (TextView) findViewById(R.id.display);
+        recordAttach = (ImageView)findViewById(R.id.clip);
 
         userLocalStore = new UserLocalStore(RecordingActivity.this);
         uploadings = new Uploadings();
         displayText.setVisibility(View.GONE);
-        adapter = new mypost_adapters(this);
+        adapter = new mypost_adapters(this,null,null,null);
 
         if (!hasMicrophone()) {
             speak.setEnabled(false);
@@ -139,7 +163,7 @@ public class RecordingActivity extends ActionBarActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkRecord)
+                if(checkRecord || hasUpload)
                     upload_to_server();
             }
         });
@@ -150,6 +174,91 @@ public class RecordingActivity extends ActionBarActivity {
                 finish();
             }
         });
+
+        recordAttach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFileChooser();
+            }
+        });
+    }
+
+    private void getVoiceDuration(String vn){
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try {
+            mediaPlayer.setDataSource(vn);
+            mediaPlayer.prepare();
+            double finalTime = mediaPlayer.getDuration();
+            setDuration = ReturnDuration(finalTime);
+            _length = finalTime;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public String ReturnDuration(double finalT) {
+        return String.format("%d m, %d s",
+                TimeUnit.MILLISECONDS.toMinutes((long) finalT),
+                TimeUnit.MILLISECONDS.toSeconds((long) finalT) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) finalT)));
+    }
+
+    private void showFileChooser() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        try {
+            startActivityForResult(Intent.createChooser(intent, "Select an audio file to Upload"), FILE_SELECT_CODE);
+        }catch (ActivityNotFoundException e){
+            Toast.makeText(RecordingActivity.this,"Install File Manager",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == FILE_SELECT_CODE && resultCode == RESULT_OK && null != data){
+            Uri getUri = data.getData();
+            String[] projection = {"_data"};
+            Cursor cursor = getContentResolver().query(getUri, projection, null, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(projection[0]);
+            String iniPath = cursor.getString(columnIndex);
+            String getExtension = iniPath.substring(iniPath.lastIndexOf("."));
+            switch (getExtension){
+                case ".3gp":
+                case ".3GP":
+                case ".aac":
+                case ".AAC":
+                case ".mpeg4":
+                case ".MPEG4":
+                case ".mp3":
+                    if(_length < 60000) {
+                        getVoiceDuration(iniPath);
+                        outputPath = iniPath;
+                        //copy file to voicenote folder
+                        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC+"/vip-voicenotes/");
+                        File file = new File(outputPath);
+                        String inputName = "file_to_upload_"+file.getName();
+                        utils.copyFile(outputPath,inputName,path.toString());
+                        hasUpload = true;
+                        Toast.makeText(RecordingActivity.this, "Voicenote ready for upload. Length = "+_length, Toast.LENGTH_LONG).show();
+                    }else {
+                        Toast.makeText(RecordingActivity.this, "Audio duration is greater than 1min", Toast.LENGTH_LONG).show();
+                        if(!checkRecord) {
+                            outputPath = "";
+                            setDuration = "";
+                            _length = 0;
+                            hasUpload = false;
+                        }
+                    }
+                    break;
+                default:
+                    Toast.makeText(RecordingActivity.this, "wrong audio format.Try again", Toast.LENGTH_LONG).show();
+                    break;
+            }
+        }
     }
 
     private void upload_to_server() {
@@ -167,8 +276,10 @@ public class RecordingActivity extends ActionBarActivity {
         Date date = new Date();
         String currentDate = date.toLocaleString();
 
+        //String dur = voiceLength(length_of_record);
+
         setList(setCaption, filename, getImage, foreignKey, getUser, "timer_icon", currentDate);
-        myPostCustomList = new MyPostCustomList(RecordingActivity.this,setCaption, filename, getImage, foreignKey, getUser, currentDate, outputPath,"partial");
+        myPostCustomList = new MyPostCustomList(RecordingActivity.this,setCaption, filename, getImage, foreignKey, getUser, currentDate, outputPath,"partial",setDuration);
         myPostCustomList.startTask();
 
 
@@ -237,7 +348,6 @@ public class RecordingActivity extends ActionBarActivity {
             }
             mediaRecorder.start();
             handler.postDelayed(recordValue,1000);
-            //Toast.makeText(RecordingActivity.this, "Recording started", Toast.LENGTH_LONG).show();
         }else{
             Toast.makeText(RecordingActivity.this, "No sdcard or sdcard available space is low", Toast.LENGTH_LONG).show();
         }
@@ -256,8 +366,19 @@ public class RecordingActivity extends ActionBarActivity {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mic1);
             Drawable d = new BitmapDrawable(bitmap);
             speak.setBackground(d);
+            getVoiceDuration(outputPath);
             Toast.makeText(RecordingActivity.this, "Recording stopped", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private String voiceLength(String length){
+        String returnLength = "";
+        String minute = length.substring(0,length.indexOf(":"));
+        String seconds = length.substring(length.indexOf(":")+1);
+
+        returnLength = minute+" m"+", "+seconds+" s";
+
+        return returnLength;
     }
 
     private Runnable recordValue = new Runnable() {

@@ -35,8 +35,8 @@ public class Parser {
     private static UserLocalStore userLocalStore = new UserLocalStore(context);
 
     public static void performContactTask() {
-
-        cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        String dn = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME;
+        cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, dn+" asc");
         while (cursor.moveToNext()) {
             String contact_name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String contact_phone = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -55,7 +55,7 @@ public class Parser {
         for (int i = 0; i < cus_phones.size(); i++) {
             for (int j = 1; j < cus_phones.size(); j++) {
 
-                if (cus_phones.get(i).contentEquals(cus_phones.get(j))) {
+                if (PhoneNumberUtils.compare(context,cus_phones.get(i),cus_phones.get(j))){//cus_phones.get(i).contentEquals(cus_phones.get(j))) {
                     cus_phones.remove(j);
                 }
 

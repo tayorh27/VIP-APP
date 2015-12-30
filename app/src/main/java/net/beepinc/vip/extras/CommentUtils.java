@@ -19,7 +19,6 @@ public class CommentUtils {
     public static String current_post;
     public CommentUtils(String current_post1){
         this.current_post = current_post1;
-
     }
 
     public static final String web_url = AppConfig.web_url+"php_fetch/FetchCommentData.php";

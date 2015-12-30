@@ -53,6 +53,8 @@ public class RecentPost extends Fragment implements RecentPostsLoadedListener, S
 
         View row = inflater.inflate(R.layout.recent_post, container, false);
 
+        AppConfig.ReplaceDefaultFont(getActivity(),"DEFAULT","avenir_light.ttf");
+
         recyclerView = (RecyclerView)row.findViewById(R.id.recent_post_View);
         progressBar = (ProgressBar)row.findViewById(R.id.progressBar);
         swipeRefreshLayout = (SwipeRefreshLayout)row.findViewById(R.id.swipe);
@@ -70,7 +72,7 @@ public class RecentPost extends Fragment implements RecentPostsLoadedListener, S
             textView.setText("Oooop no internet");
         }
 
-        adapters = new recentposts_adapters(getActivity());
+        adapters = new recentposts_adapters(getActivity(),recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapters);
 

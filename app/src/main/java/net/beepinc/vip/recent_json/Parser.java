@@ -31,8 +31,8 @@ public class Parser {
     private static Context context = MyApplication.getAppContext();
 
     public static void performContactTask() {
-
-        cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        String dn = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME;
+        cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, dn+" asc ");
         while (cursor.moveToNext()) {
             String contact_name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String contact_phone = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -51,7 +51,7 @@ public class Parser {
         for (int i = 0; i < cus_phones.size(); i++){
             for (int j = 1; j < cus_phones.size(); j++){
 
-                if(cus_phones.get(i).contentEquals(cus_phones.get(j))){
+                if(PhoneNumberUtils.compare(context,cus_phones.get(i),cus_phones.get(j))){//cus_phones.get(i).contentEquals(cus_phones.get(j))){
                     cus_phones.remove(j);
                 }
 
@@ -85,8 +85,9 @@ public class Parser {
         List<String> customComment = new ArrayList<>();
         List<String> customLikes = new ArrayList<>();
         List<String> customLikeUsers = new ArrayList<>();
+        List<String> duration = new ArrayList<>();
 
-        String[] caps, vn, imgs, mobs, uses, time, ids,ups,coms,liks,lUsers;
+        String[] caps, vn, imgs, mobs, uses, time, ids,ups,coms,liks,lUsers,dur;
 
         if (jsonArray != null && jsonArray.length() > 0) {
 
@@ -101,6 +102,7 @@ public class Parser {
                     customUsername.add(json.getString("username"));
                     customTime.add(json.getString("time"));
                     customId.add(json.getString("id"));
+                    duration.add(json.getString("duration"));
                     customUpload.add(json.getString("uploaded"));
                     customComment.add(json.getString("number_of_comments"));
                     customLikes.add(json.getString("number_of_likes"));
@@ -122,6 +124,7 @@ public class Parser {
             coms = new String[jsonArray.length()];
             liks = new String[jsonArray.length()];
             lUsers = new String[jsonArray.length()];
+            dur = new String[jsonArray.length()];
 
             for (int j = 0; j < customUsername.size(); j++) {
 
@@ -136,6 +139,7 @@ public class Parser {
                 coms[j] = customComment.get(j);
                 liks[j] = customLikes.get(j);
                 lUsers[j]  = customLikeUsers.get(j);
+                dur[j]  = duration.get(j);
             }
 
             for (int i = 0; i < mobs.length; i++) {
@@ -153,8 +157,9 @@ public class Parser {
                         String get_comment = coms[i];
                         String get_likes = liks[i];
                         String get_like_users = lUsers[i];
+                        String get_duration = dur[i];
 
-                        recent_post_information current = new recent_post_information(get_caption, get_vn, get_image, get_mobile, get_user, get_time, get_id, get_upload,get_comment,get_likes,get_like_users);
+                        recent_post_information current = new recent_post_information(get_caption, get_vn, get_image, get_mobile, get_user, get_time, get_id, get_upload,get_comment,get_likes,get_like_users,get_duration);
 
                         customData.add(current);
 

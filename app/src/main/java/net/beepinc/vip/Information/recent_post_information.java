@@ -12,7 +12,9 @@ public class recent_post_information implements Parcelable{
 
     public String nComments,nLikes, nLikeUser;
 
-    public recent_post_information(String cap, String v, String img, String mob, String u, String created_time, String Id, String uploaded, String nComments,String nLikes, String nLikeUser){
+    public String duration,attachedImage;
+
+    public recent_post_information(String cap, String v, String img, String mob, String u, String created_time, String Id, String uploaded, String nComments,String nLikes, String nLikeUser,String duration){
         this.caption = cap;
         this.voicenote = v;
         this.image = img;
@@ -24,6 +26,7 @@ public class recent_post_information implements Parcelable{
         this.nComments =nComments;
         this.nLikes=nLikes;
         this.nLikeUser = nLikeUser;
+        this.duration = duration;
     }
 
     public recent_post_information(){
@@ -42,6 +45,7 @@ public class recent_post_information implements Parcelable{
         nComments = parcel.readString();
         nLikes =parcel.readString();
         nLikeUser = parcel.readString();
+        duration = parcel.readString();
     }
 
 
@@ -75,5 +79,6 @@ public class recent_post_information implements Parcelable{
         dest.writeString(nComments);
         dest.writeString(nLikes);
         dest.writeString(nLikeUser);
+        dest.writeString(duration);
     }
 }

@@ -23,6 +23,8 @@ public class TimeUtils {
 
     public final static long ONE_MONTH = ONE_WEEK * 4;
 
+    public final static long ONE_YEAR = ONE_MONTH * 12;
+
     private TimeUtils() {
     }
 
@@ -35,6 +37,7 @@ public class TimeUtils {
 
         long diff = currentTime - duration;
 
+        double years = Math.floor((double) diff/ONE_YEAR);
         double months = Math.floor((double) diff/ONE_MONTH);
         double weeks = Math.floor((double)diff/ONE_WEEK);
 
@@ -43,6 +46,7 @@ public class TimeUtils {
         double minutes = Math.floor((double) (diff % ONE_HOUR) / ONE_MINUTE);
         double seconds = Math.floor((double) (diff % ONE_MINUTE) / ONE_SECOND);
 
+        int yr = (int)years;
         int mt = (int)months;
         int w = (int)weeks;
 
@@ -51,7 +55,25 @@ public class TimeUtils {
         int m = (int)minutes;
         int s = (int)seconds;
 
-        if(days > 0){
+        if(years > 0){
+            if(yr == 1){
+                outTime = String.valueOf(yr)+"yr ago";
+            }else{
+                outTime = String.valueOf(yr)+"yrs ago";
+            }
+        }else if(months > 0){
+            if(mt == 1){
+                outTime = String.valueOf(mt)+"mon ago";
+            }else{
+                outTime = String.valueOf(mt)+"mons ago";
+            }
+        }else if(weeks > 0){
+            if(w == 1){
+                outTime = String.valueOf(w)+"wk ago";
+            }else{
+                outTime = String.valueOf(w)+"wks ago";
+            }
+        }else if(days > 0){
             if(d == 1){
                 outTime = String.valueOf(d)+"day ago";
             }else {

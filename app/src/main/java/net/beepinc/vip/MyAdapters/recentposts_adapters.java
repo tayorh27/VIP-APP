@@ -1,5 +1,6 @@
 package net.beepinc.vip.MyAdapters;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,8 +19,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +40,7 @@ import net.beepinc.vip.R;
 import net.beepinc.vip.Social.FetchComment;
 import net.beepinc.vip.Social.FetchLike;
 import net.beepinc.vip.Social.Likes;
+import net.beepinc.vip.Social.unLikeAndDeduct;
 import net.beepinc.vip.SocialAsyn.TaskLoadNumberOfComments;
 import net.beepinc.vip.SocialAsyn.TaskLoadNumberOfLikes;
 import net.beepinc.vip.SocialCallbacks.LoadNumberOfCommentsListener;
@@ -67,17 +71,19 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
     private VolleySingleton volleySingleton;
     private ImageLoader imageLoader;
     private UserLocalStore userLocalStore;
+    private RecyclerView recyclerView;
     //private TaskLoadNumberOfComments taskLoadNumberOfComments;
     private int nlikes;
     private int ncomments;
     private String last_duration="";
 
-    public recentposts_adapters(Context context_) {
+    public recentposts_adapters(Context context_,RecyclerView recyclerView) {
         this.context = context_;
         inflater = LayoutInflater.from(context);
         volleySingleton = VolleySingleton.getInstance();
         imageLoader = volleySingleton.getImageLoader();
         userLocalStore = new UserLocalStore(context);
+        this.recyclerView = recyclerView;
     }
 
     public void setLists(ArrayList<recent_post_information> infos) {
@@ -119,10 +125,17 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
             //nlikes = 0;
 
             holder.username.setText(current.username);
-            if (current.caption.contains("VIP")) {
+            String caption = current.caption;
+            if (caption.contains("VIP")) {
                 holder.caption.setText("No Caption");
-            } else {
-                holder.caption.setText(current.caption);
+            }else if(caption.length() > 25){
+                String cap = caption.substring(0,25)+"...";
+                holder.caption.setText(cap);
+            }else if(caption.length() > 50){
+                String cap = caption.substring(0,50)+"...";
+                holder.caption.setText(cap);
+            }else {
+                holder.caption.setText(caption);
             }
 
             Date getTime = new Date(current.time);
@@ -147,7 +160,7 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
                     }
                 });
             }
-            holder.duration.setText(SetMedia(current.voicenote));
+            holder.duration.setText(current.duration);//SetMedia(current.voicenote));
         }
 
 
@@ -184,7 +197,7 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
 
     public String ReturnDuration(double finalT) {
         return String.format("%d m, %d s",
-                TimeUnit.MILLISECONDS.toMinutes((long) finalT),// - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) finalT)),
+                TimeUnit.MILLISECONDS.toMinutes((long) finalT),
                 TimeUnit.MILLISECONDS.toSeconds((long) finalT) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) finalT)));
     }
 
@@ -219,11 +232,16 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
 
     public class RecentAdapter extends RecyclerView.ViewHolder implements View.OnClickListener, LoadNumberOfLikesListener, LoadNumberOfCommentsListener {
 
+        int time_of_play = 0;
+        int status = 0;
+
+        boolean played = false;
         private Context context;
         private MediaPlayer mediaPlayer;
         private Handler handler;
         ImageView imageView;
         ImageView imageView2;
+        ImageView overflow;
         TextView caption, time, duration, likes, comments,username,repost;
         Button button;
         ProgressBar progressBar;
@@ -237,6 +255,7 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
             context = itemView.getContext();
             imageView = (ImageView) itemView.findViewById(R.id.custom_recentpost_dp);
             imageView2 = (ImageView) itemView.findViewById(R.id.download);
+            overflow = (ImageView) itemView.findViewById(R.id.overflow);
             caption = (TextView) itemView.findViewById(R.id.custom_recentpost_text);
             time = (TextView) itemView.findViewById(R.id.custom_recentpost_time);
             duration = (TextView) itemView.findViewById(R.id.custom_duration);
@@ -255,6 +274,16 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
             likes.setOnClickListener(this);
             comments.setOnClickListener(this);
             repost.setOnClickListener(this);
+            overflow.setOnClickListener(this);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    recent_post_information current1 = informations.get(getPosition());
+                    Date getTime = new Date(current1.time);
+                    long milli = getTime.getTime();
+                    OpenCommentActivity(current1.voicenote,current1.username,current1.caption,current1.image,TimeUtils.setAgo(milli),current1.duration);
+                }
+            });
 
         }
 
@@ -262,6 +291,10 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
         public void onClick(View v) {
             User user = userLocalStore.getLoggedUser();
             switch (v.getId()) {
+                case R.id.overflow:
+                    recent_post_information cur = informations.get(getPosition());
+                    showDialog(cur);
+                    break;
                 case R.id.custom_recentpost_dp:
                     displayDP();
                     break;
@@ -275,7 +308,9 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
                 case R.id.custom_comments:
                     //perform comment
                     recent_post_information current1 = informations.get(getPosition());
-                    OpenCommentActivity(current1.voicenote);
+                    Date getTime = new Date(current1.time);
+                    long milli = getTime.getTime();
+                    OpenCommentActivity(current1.voicenote,current1.username,current1.caption,current1.image,TimeUtils.setAgo(milli),current1.duration);
                     break;
                 case R.id.download:
                     //perform download
@@ -288,32 +323,69 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
             }
         }
 
+        private void showDialog(recent_post_information rpi) {
+            LayoutInflater inflater1 = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View custom_view = inflater1.inflate(R.layout.custom_dialog,(ViewGroup)itemView.findViewById(R.id.root),false);
+            ListView lv = (ListView)custom_view.findViewById(R.id.custom_dialog_list);
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    switch (position){
+                        case 0:
+                            //add to favorites
+                            Toast.makeText(context,"add to favorites click",Toast.LENGTH_LONG).show();
+                            break;
+                        case 1:
+                            //view like users
+                            Toast.makeText(context,"view like users click",Toast.LENGTH_LONG).show();
+                            break;
+                    }
+                }
+            });
+            Dialog dialog = new Dialog(context);
+            dialog.setTitle("Other options");
+            dialog.setCancelable(true);
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.setContentView(custom_view);
+            dialog.show();
+        }
+
         private void RepostVN() {
+            Toast.makeText(context,"Re-posting voiceneote",Toast.LENGTH_LONG).show();
             recent_post_information current = informations.get(getPosition());
             Date date = new Date();
             String currentDate = date.toLocaleString();
             User user = userLocalStore.getLoggedUser();
-            String username = user.uname+" shared "+current.username+"'s post";
-            MyPostCustomList postCustomList = new MyPostCustomList(context,current.caption, current.voicenote, user.image, user.mob, username,currentDate,"","full");
-            postCustomList.Upload_to_Database_repost();
+            String username_1 = user.uname+" shared "+current.username+"'s post";
+            String dur = current.duration;
+            MyPostCustomList postCustomList = new MyPostCustomList(context,current.caption, current.voicenote, user.image, user.mob, username_1,currentDate,"","full",dur);
+            postCustomList.Upload_to_Database_repost(recyclerView,username_1);
 
         }
 
         private void LikeClicked(User user) {
+            recent_post_information current = informations.get(getPosition());
             if (likes.getTextColors().getDefaultColor() != context.getResources().getColor(R.color.like)) {
-                recent_post_information current = informations.get(getPosition());
                 new Likes(context, likes, current.voicenote, user.image, user.mob, user.uname, "liked" + user.uname, "1").startTask();
                 new TaskLoadNumberOfLikes(this,current.voicenote).execute();
                 new TaskLoadNumberOfComments(this,current.voicenote).execute();
                 //likes.setText(nlikes.size() + "like(s)");
-            } else {
-                Toast.makeText(context, "voicenote liked already!", Toast.LENGTH_LONG).show();
+            } else if (likes.getTextColors().getDefaultColor() == context.getResources().getColor(R.color.like)){
+                new unLikeAndDeduct(context,current.voicenote,user.uname,likes).startTask();
+                new TaskLoadNumberOfLikes(this,current.voicenote).execute();
+                new TaskLoadNumberOfComments(this,current.voicenote).execute();
+                //Toast.makeText(context, "voicenote liked already!", Toast.LENGTH_LONG).show();
             }
         }
 
-        private void OpenCommentActivity(String voicenote) {
+        private void OpenCommentActivity(String voicenote,String username,String caption,String image,String date,String dur) {
             Bundle bundle = new Bundle();
             bundle.putString("voicenote", voicenote);
+            bundle.putString("username",username);
+            bundle.putString("caption",caption);
+            bundle.putString("image",image);
+            bundle.putString("date",date);
+            bundle.putString("duration",dur);
             Intent intent = new Intent(context, CommentActivity.class);
             intent.putExtras(bundle);
             context.startActivity(intent);
@@ -334,6 +406,7 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
 
         private void PlayMedia() {
             String text = button.getTag().toString();
+            played = true;
             recent_post_information current = informations.get(getPosition());
 
             if (text.contentEquals("play")) {
@@ -367,6 +440,8 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
                 Drawable d = new BitmapDrawable(bitmap);
                 button.setBackground(d);
                 mediaPlayer.pause();
+                progressBar.setProgress(mediaPlayer.getCurrentPosition());
+                time_of_play = mediaPlayer.getCurrentPosition();
             }
         }
 
@@ -380,12 +455,13 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
                 duration.setText(currentPosition);
                 progressBar.setProgress((int) startTime);
                 handler.postDelayed(this, 100);
-                if (!mediaPlayer.isPlaying()) {
+                if (!mediaPlayer.isPlaying()){//) {
                     button.setTag("play");
                     progressBar.setMax(0);
                     Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.play_icon);
                     Drawable d = new BitmapDrawable(bitmap);
                     button.setBackground(d);
+                    status = 1;
                 }
             }
         };

@@ -7,7 +7,7 @@
     android:layout_gravity="center"
     android:layout_margin="8dp"
     card_view:cardCornerRadius="4dp">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -22,12 +22,21 @@
         android:typeface="sans"
         android:paddingLeft="10dp"/>
 
+        <ImageView
+            android:id="@+id/overflow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="7dp"/>
+
         <View
             android:layout_width="wrap_content"
             android:layout_height="1dp"
             android:background="#ff0acca1"
+            android:layout_below="@+id/custom_name"
             android:layout_marginTop="3dp"/>
-    </LinearLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -66,7 +75,7 @@
             android:layout_toRightOf="@+id/thumbnail"
             android:text="caption"
             android:textColor="#00695c"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:typeface="sans"
             android:paddingLeft="10dp"/>
@@ -113,8 +122,8 @@
 
         <ImageView
             android:id="@+id/download"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:src="@drawable/cloud_down_icon"/>
 
         <TextView

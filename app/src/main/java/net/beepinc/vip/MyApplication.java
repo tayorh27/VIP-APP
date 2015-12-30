@@ -6,6 +6,9 @@ import android.content.Context;
 import net.beepinc.vip.LocalDBs.FavDatabase;
 import net.beepinc.vip.LocalDBs.MyPostDatabase;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.TypefaceUtils;
+
 /**
  * Created by tayo on 9/28/2015.
  */
@@ -21,6 +24,10 @@ public class MyApplication extends Application {
         sInstance = this;
         favDatabase = new FavDatabase(this);
         myPostDatabase = new MyPostDatabase(this);
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                                    .setDefaultFontPath("avenir_light.ttf")
+                                    .setFontAttrId(R.attr.fontPath)
+                                    .build());
     }
 
     public static MyApplication getInstance(){

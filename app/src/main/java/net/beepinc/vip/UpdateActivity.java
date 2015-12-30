@@ -73,6 +73,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 
 public class UpdateActivity extends ActionBarActivity {
 
@@ -107,9 +109,16 @@ public class UpdateActivity extends ActionBarActivity {
 
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update);
+
+        AppConfig.ReplaceDefaultFont(UpdateActivity.this,"DEFAULT","avenir_light.ttf");
 
         volleySingleton = VolleySingleton.getInstance();
         imageLoader = volleySingleton.getImageLoader();

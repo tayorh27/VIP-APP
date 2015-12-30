@@ -296,28 +296,32 @@ public class FavoriteContact extends Fragment implements favorites_adapters.Clic
 
     @Override
     public void ItemClick(View view, int Position) {
-        AlertDialog ad = new AlertDialog.Builder(getActivity()).create();
-        String name = customList.get(Position).title;
-        final String phone = customList.get(Position).subtitle;
-        ad.setTitle(name);
-        ad.setMessage(phone);
-        ad.setButton("CALL" , new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel: "+phone));
-                startActivity(intent);
-            }
-        });
-        ad.setButton2("SMS", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("sms: "+phone));
-                startActivity(intent);
-            }
-        });
-        ad.show();
+        try {
+            AlertDialog ad = new AlertDialog.Builder(getActivity()).create();
+            String name = customList.get(Position).title;
+            final String phone = customList.get(Position).subtitle;
+            ad.setTitle(name);
+            ad.setMessage(phone);
+            ad.setButton("CALL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel: " + phone));
+                    startActivity(intent);
+                }
+            });
+            ad.setButton2("SMS", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse("sms: " + phone));
+                    startActivity(intent);
+                }
+            });
+            ad.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

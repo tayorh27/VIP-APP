@@ -49,6 +49,7 @@ import java.net.URL;
 import me.tatarka.support.job.JobInfo;
 import me.tatarka.support.job.JobScheduler;
 import me.tatarka.support.os.PersistableBundle;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -65,6 +66,11 @@ public class MainActivity extends ActionBarActivity {
     ViewPager pager;
     SlidingTabLayout tab;
     private JobScheduler jobScheduler;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

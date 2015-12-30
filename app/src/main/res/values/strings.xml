@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <declare-styleable name="customfont">
+        <attr name="android:fontFamily"/>
+        <attr name="android:textStyle"/>
+    </declare-styleable>
+
     <string name="app_name">VIP</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -9,6 +14,11 @@
     <string name="copy_right"><i>copyright © 2015 BIP Inc.</i></string>
     <string name="prom">Select a Category</string>
     <string name="logo_name"><b>VIP</b></string>
+
+    <string-array name="overflow_options">
+        <item>Add to favorites</item>
+        <item>View like users</item>
+    </string-array>
 
     <string-array name="category">
         <item>Default</item>
@@ -49,6 +59,6 @@
     <string name="prom2">select a question</string>
     <string name="title_activity_forgot_password">ForgotPassword</string>
     <string name="title_activity_reset_password">ResetPassword</string>
-    <string name="title_activity_favorite_contacts">FavoriteContacts</string>
+    <string name="title_activity_favorite_contacts">Your Contacts</string>
 
 </resources>

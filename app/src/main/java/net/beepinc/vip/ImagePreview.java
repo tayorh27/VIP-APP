@@ -41,6 +41,8 @@ public class ImagePreview extends ActionBarActivity {
     UserLocalStore userLocalStore;
     private String username;
     private Utils utils;
+    private Menu optMenu;
+    private boolean sMenu = true;
 
 
     @Override
@@ -72,14 +74,46 @@ public class ImagePreview extends ActionBarActivity {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                 imageView.setImageBitmap(response.getBitmap());
+                if(onCreateOptionsMenu(optMenu)){
+                    //showMenu();
+                }
             }
 
             @Override
             public void onErrorResponse(VolleyError error) {
                 imageView.setImageResource(R.drawable.avatar_default);
+                //sMenu = false;
             }
         });
 
+        Thread thread = new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }finally {
+                    if(sMenu){
+                       // showMenu();
+                    }
+                }
+            }
+        };
+        thread.start();
+
+    }
+
+    private void showMenu(){
+        try {
+            MenuItem mi_download = optMenu.findItem(R.id.action_download);
+            MenuItem mi_share = optMenu.findItem(R.id.action_share);
+            mi_download.setVisible(true);
+            mi_share.setVisible(true);
+        }catch (Exception e){
+            Toast.makeText(ImagePreview.this,e.toString(),Toast.LENGTH_LONG).show();
+        }
     }
 
     public void checkSDCARD() {
@@ -143,6 +177,7 @@ public class ImagePreview extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_image_preview, menu);
+        optMenu = menu;
         return true;
     }
 

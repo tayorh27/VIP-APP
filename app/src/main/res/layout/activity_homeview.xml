@@ -23,7 +23,9 @@
         android:textAlignment="center"
         android:textColor="#FFF"
         android:textSize="25sp"
-        android:layout_gravity="center_horizontal"/>
+        fontPath="fonts/gasmaskwarriors.ttf"
+        android:layout_gravity="center_horizontal"
+        tools:ignore="MissingPrefix" />
 
     <ScrollView
         android:layout_width="match_parent"

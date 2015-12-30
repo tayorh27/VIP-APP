@@ -17,7 +17,6 @@ public class Parser {
 
     public static ArrayList<comment_information> parseJSONResponse(JSONArray jsonArray, String current_post) {
 
-
         ArrayList<comment_information> customData = new ArrayList<>();
 
         String serverUrl = AppConfig.web_url+"images/";

@@ -205,4 +205,106 @@ public class Uploadings {
 
         return serverResponseCode;
     }
+
+    public int uploadAttachedImage(Context context, String picturePath) {
+        this.context = context;
+        String upLoadServerUri = AppConfig.web_url+"upload_attach.php";
+        String filename = picturePath;
+
+        HttpURLConnection conn = null;
+        DataOutputStream dos = null;
+        DataInputStream inStream = null;
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary = "*****";
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1 * 1024 * 1024;
+        File sourceFile = new File(picturePath);
+        if (!sourceFile.isFile()) {
+            Log.d("uploadFile", "Source File does not exist");
+            return 0;
+        }
+
+        try {
+            FileInputStream fileInputStream = new FileInputStream(picturePath);
+            URL url = new URL(upLoadServerUri);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.setUseCaches(false);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("ENCRYPT", "multipart/form-data");
+            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+            conn.setRequestProperty("uploaded_file", filename);
+
+            dos = new DataOutputStream(conn.getOutputStream());
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\"" + filename + "\"" + lineEnd);
+            dos.writeBytes(lineEnd);
+
+            bytesAvailable = fileInputStream.available();
+
+            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            buffer = new byte[bufferSize];
+
+            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+            while (bytesRead > 0) {
+                dos.write(buffer, 0, bufferSize);
+                bytesAvailable = fileInputStream.available();
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+            }
+
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+            serverResponseCode = conn.getResponseCode();
+            String serverResponseMessage = conn.getResponseMessage();
+            Log.i("uploadFile", "HTTP Response is : " + serverResponseMessage + ": " + serverResponseCode);
+            if (serverResponseCode == 200) {
+                Log.e("Sent", "uploaded successfully");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+            }
+
+            fileInputStream.close();
+            dos.flush();
+            dos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //------------------ read the SERVER RESPONSE
+        try {
+            inStream = new DataInputStream(conn.getInputStream());
+            String str;
+
+            while (( str = inStream.readLine()) != null)
+            {
+                Log.e("Debug", "Server Response " + str);
+            }
+            inStream.close();
+
+        }
+        catch (IOException ioex){
+            Log.e("Debug", "error: " + ioex.getMessage(), ioex);
+        }
+
+
+        return serverResponseCode;
+    }
+
+
 }

@@ -61,6 +61,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 
 public class Loginview extends ActionBarActivity {
 
@@ -72,7 +74,7 @@ public class Loginview extends ActionBarActivity {
 
     EditText uname, pwd;
     TextInputLayout tu, tp;
-    TextView tv,forgot;
+    TextView tv, forgot;
     InternetChecking isConnt;
 
     Boolean chks = false;
@@ -88,11 +90,17 @@ public class Loginview extends ActionBarActivity {
 
     boolean checkLog = false;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginview);
+
+        AppConfig.ReplaceDefaultFont(Loginview.this, "DEFAULT", "avenir_light.ttf");
 
         volleySingleton = VolleySingleton.getInstance();
         requestQueue = volleySingleton.getRequestQueue();
@@ -111,11 +119,6 @@ public class Loginview extends ActionBarActivity {
         userLoginCheck = new UserLoginCheck(Loginview.this);
 
 
-
-        InputMethodManager ims = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        ims.hideSoftInputFromWindow(uname.getWindowToken(), 0);
-        ims.hideSoftInputFromWindow(pwd.getWindowToken(), 0);
-
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,16 +132,12 @@ public class Loginview extends ActionBarActivity {
                         tp.setError("Provide Password");
                     } else {
                         chks = isConnt.isConnectedToInternet();
-                        if (chks) {
-                            try {
-                                LogUserIn(get_username, get_password);
-                                //new LoggedUserIn(get_username, get_password, Loginview.this).execute();
-                            } catch (Exception e) {
-                                Log.d("Error5", "Error5-" + e.getMessage());
-                                Toast.makeText(Loginview.this, "Error here!!!", Toast.LENGTH_LONG).show();
-                            }
-                        } else {
-                            Toast.makeText(Loginview.this, "No internet connection", Toast.LENGTH_LONG).show();
+                        try {
+                            LogUserIn(get_username, get_password);
+                            //new LoggedUserIn(get_username, get_password, Loginview.this).execute();
+                        } catch (Exception e) {
+                            Log.d("Error5", "Error5-" + e.getMessage());
+                            Toast.makeText(Loginview.this, "Error here!!!", Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -167,7 +166,7 @@ public class Loginview extends ActionBarActivity {
 
     }
 
-    private void retrieveDetails(){
+    private void retrieveDetails() {
         String get_username = uname.getText().toString();
         if (get_username.contentEquals("")) {
             tu.setError("Provide Username");
@@ -191,7 +190,7 @@ public class Loginview extends ActionBarActivity {
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Validating user");
         progressDialog.show();
-        String web_url = AppConfig.web_url+"update_files/FetchSecurityAnswer.php?username="+username;
+        String web_url = AppConfig.web_url + "update_files/FetchSecurityAnswer.php?username=" + username;
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(web_url, new Response.Listener<JSONArray>() {
             @Override
@@ -203,7 +202,7 @@ public class Loginview extends ActionBarActivity {
                     String gSA = object.getString("security_answer");
 
                     Bundle bundle = new Bundle();
-                    bundle.putInt("id",gID);
+                    bundle.putInt("id", gID);
                     bundle.putString("security_question", gSQ);
                     bundle.putString("security_answer", gSA);
 
@@ -230,7 +229,7 @@ public class Loginview extends ActionBarActivity {
         requestQueue.add(jsonArrayRequest);
     }
 
-    private void LogUserIn(String gUser, final String gPass){
+    private void LogUserIn(String gUser, final String gPass) {
         alertDialog = new AlertDialog.Builder(Loginview.this).create();
         alertDialog.setTitle("VIP - Error");
         alertDialog.setMessage("Incorrect username or password");
@@ -246,7 +245,7 @@ public class Loginview extends ActionBarActivity {
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Logging user in");
         progressDialog.show();
-        String web_url = AppConfig.web_url+"FetchUserData.php?username="+gUser;
+        String web_url = AppConfig.web_url + "FetchUserData.php?username=" + gUser;
 
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(web_url, new Response.Listener<JSONArray>() {
             @Override
@@ -254,7 +253,7 @@ public class Loginview extends ActionBarActivity {
                 try {
                     JSONObject response = response1.getJSONObject(0);
                     String getPass = response.getString("password");
-                    if(getPass.contentEquals(gPass)) {
+                    if (getPass.contentEquals(gPass)) {
                         int id = response.getInt("id");
                         String userNm = response.getString("username");
                         String pWD = response.getString("password");
@@ -271,7 +270,7 @@ public class Loginview extends ActionBarActivity {
                         Intent intent = new Intent(Loginview.this, MainActivity.class);
                         startActivity(intent);
                         finish();
-                    }else{
+                    } else {
                         alertDialog.show();
                         progressDialog.dismiss();
                     }
@@ -288,7 +287,7 @@ public class Loginview extends ActionBarActivity {
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
                 GlobalUse.handleVolleyError(error, Loginview.this);
-                alertDialog.show();
+                //alertDialog.show();
             }
         });
 
