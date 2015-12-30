@@ -39,6 +39,7 @@ import com.android.volley.toolbox.StringRequest;
 
 import net.beepinc.vip.activity_adapters.Security_Adapter;
 import net.beepinc.vip.generalUsage.GlobalUse;
+import net.beepinc.vip.helper.ParseUtils;
 import net.beepinc.vip.network.VolleySingleton;
 
 import org.json.JSONException;
@@ -377,6 +378,7 @@ public class Signup extends ActionBarActivity {
                     Toast.makeText(Signup.this, "Error Occurred", Toast.LENGTH_LONG).show();
                 }
                 if(success == 1){
+                    ParseUtils.subscribeWithEmail(username);///// it is here //////
                     Toast.makeText(Signup.this,"Account successfully created\nLogin now.", Toast.LENGTH_LONG).show();
                     pdd.dismiss();
                     startActivity(new Intent(Signup.this, Loginview.class));

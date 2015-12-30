@@ -5,6 +5,7 @@ import android.content.Context;
 
 import net.beepinc.vip.LocalDBs.FavDatabase;
 import net.beepinc.vip.LocalDBs.MyPostDatabase;
+import net.beepinc.vip.helper.ParseUtils;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
@@ -28,6 +29,7 @@ public class MyApplication extends Application {
                                     .setDefaultFontPath("avenir_light.ttf")
                                     .setFontAttrId(R.attr.fontPath)
                                     .build());
+        ParseUtils.registerParse(this);
     }
 
     public static MyApplication getInstance(){

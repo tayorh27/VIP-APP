@@ -74,9 +74,6 @@ public class ImagePreview extends ActionBarActivity {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                 imageView.setImageBitmap(response.getBitmap());
-                if(onCreateOptionsMenu(optMenu)){
-                    //showMenu();
-                }
             }
 
             @Override
