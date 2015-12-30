@@ -546,7 +546,7 @@ public class UpdateActivity extends ActionBarActivity {
                     JSONObject object = new JSONObject(response);
                     success = object.getInt("success");
                     if(success == 1){
-                        userLocalStore.clearUserDatabase();
+                        //userLocalStore.clearUserDatabase();
                         Toast.makeText(UpdateActivity.this,"Profile successfully updated\nLogin again.", Toast.LENGTH_LONG).show();
                         pdd.dismiss();
                         startActivity(new Intent(UpdateActivity.this, Loginview.class));

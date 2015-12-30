@@ -243,6 +243,7 @@ public class RecordingActivity extends ActionBarActivity {
                         String inputName = "file_to_upload_"+file.getName();
                         utils.copyFile(outputPath,inputName,path.toString());
                         hasUpload = true;
+                        Filename = inputName;
                         Toast.makeText(RecordingActivity.this, "Voicenote ready for upload. Length = "+_length, Toast.LENGTH_LONG).show();
                     }else {
                         Toast.makeText(RecordingActivity.this, "Audio duration is greater than 1min", Toast.LENGTH_LONG).show();

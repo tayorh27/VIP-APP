@@ -1,6 +1,7 @@
 package net.beepinc.vip;
 
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,6 +12,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.Data;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -60,6 +63,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -355,6 +359,16 @@ public class Signup extends ActionBarActivity {
         return serverResponseCode;
     }
 
+    private void addContact(String number,String username){
+        ContentValues values = new ContentValues();
+        values.put(Data.RAW_CONTACT_ID,new Random().nextInt(999));
+        values.put(Data.MIMETYPE, Phone.CONTENT_ITEM_TYPE);
+        values.put(Phone.NUMBER, number);
+        values.put(Phone.TYPE, Phone.TYPE_MAIN);
+        values.put(Phone.LABEL, username);
+        Uri dataUri = getContentResolver().insert(android.provider.ContactsContract.Data.CONTENT_URI, values);
+    }
+
     private void RegisterUser(final String username, final String mobile, final String password, final String category, final String image, final String sq, final String sa) {
 
         final ProgressDialog pdd = new ProgressDialog(Signup.this);
@@ -378,6 +392,7 @@ public class Signup extends ActionBarActivity {
                     Toast.makeText(Signup.this, "Error Occurred", Toast.LENGTH_LONG).show();
                 }
                 if(success == 1){
+                    addContact(mobile,username);
                     ParseUtils.subscribeWithEmail(username);///// it is here //////
                     Toast.makeText(Signup.this,"Account successfully created\nLogin now.", Toast.LENGTH_LONG).show();
                     pdd.dismiss();

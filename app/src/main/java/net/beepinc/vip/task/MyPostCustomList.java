@@ -178,7 +178,7 @@ public class MyPostCustomList {
                 mypost_information current1 = new mypost_information(id,caption, notes, image, mobile, nUsername, "done_icon", currentDate,"partial");
                 customData.add(current1);
                 MyApplication.getWriteableDatabaseForMyPosts().insertMyPost(customData, false);
-                new Utils(context).DownloadVoiceToSDcard(notes);
+                //new Utils(context).DownloadVoiceToSDcard(notes);
             }
         }, new Response.ErrorListener() {
             @Override
