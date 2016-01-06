@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +43,7 @@ public class FavoriteContacts extends ActionBarActivity implements SwipeRefreshL
     TextView textView;
     favorites_adapters adapters;
     UserLocalStore userLocalStore;
+    Toolbar toolbar;
 
     InternetChecking isConn;
     boolean icheck = false;
@@ -53,6 +55,9 @@ public class FavoriteContacts extends ActionBarActivity implements SwipeRefreshL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite_contacts);
 
+        toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+
         replaceFont();
 
         recyclerView = (RecyclerView) findViewById(R.id.favoriteView);
@@ -61,7 +66,7 @@ public class FavoriteContacts extends ActionBarActivity implements SwipeRefreshL
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         textView = (TextView)findViewById(R.id.textView2);
         userLocalStore = new UserLocalStore(FavoriteContacts.this);
-        adapters = new favorites_adapters(FavoriteContacts.this);
+        adapters = new favorites_adapters(FavoriteContacts.this,"show");
         User user = userLocalStore.getLoggedUser();
         isConn = new InternetChecking(FavoriteContacts.this);
         icheck = isConn.isConnectedToInternet();
@@ -78,6 +83,7 @@ public class FavoriteContacts extends ActionBarActivity implements SwipeRefreshL
                 customList = MyApplication.getWriteableDatabase().getAllFavorites();
                 progressBar.setVisibility(View.GONE);
                 if (customList.isEmpty()) {
+                    progressBar.setVisibility(View.VISIBLE);
                     new TaskLoadFavorites(this).execute();
                 }
             }

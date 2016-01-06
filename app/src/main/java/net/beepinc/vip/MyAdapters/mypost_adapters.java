@@ -57,8 +57,9 @@ public class mypost_adapters extends RecyclerView.Adapter<mypost_adapters.MyPost
     private LongClickListener lc;
     private mClickListener clickListener;
     private RecyclerView recyclerView;
+    private String what_to_do;
 
-    public mypost_adapters(Context context,LongClickListener lc,mClickListener clickListener,RecyclerView recyclerView) {
+    public mypost_adapters(Context context,LongClickListener lc,mClickListener clickListener,RecyclerView recyclerView,String what_to_do) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         volleySingleton = VolleySingleton.getInstance();
@@ -67,6 +68,7 @@ public class mypost_adapters extends RecyclerView.Adapter<mypost_adapters.MyPost
         this.lc = lc;
         this.clickListener = clickListener;
         this.recyclerView = recyclerView;
+        this.what_to_do = what_to_do;
     }
 
     public void setList(ArrayList<mypost_information> setPosts) {
@@ -85,42 +87,45 @@ public class mypost_adapters extends RecyclerView.Adapter<mypost_adapters.MyPost
     public void onBindViewHolder(final MyPostAdapter holder, int position) {
 
         mypost_information current = posts.get(position);
-        User user = userLocalStore.getLoggedUser();
-        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/vip-images");
-        File file = new File(path, current.image);
-        if(current.caption.contains("VIP")){
-            holder.caption.setText(current.username);
-        }else {
-            holder.caption.setText(current.caption);
-        }
-        if (current.Response_icon != null)
-            holder.response.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), setResponse(current.Response_icon)));
+        if(current.display.contentEquals("show")) {
 
-        if (file.exists()) {
-            try {
-                holder.imageView.setImageBitmap(BitmapFactory.decodeFile(file.toString()));
-            }catch (Exception e){
-                Log.d("Image Error", e.toString());
+            User user = userLocalStore.getLoggedUser();
+            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/vip-images");
+            File file = new File(path, current.image);
+            if (current.caption.contains("VIP")) {
+                holder.caption.setText(current.username);
+            } else {
+                holder.caption.setText(current.caption);
             }
-        } else {
-            String getRealImageName = Uri.encode(current.image);
-            imageLoader.get(imageUrl + getRealImageName, new ImageLoader.ImageListener() {
-                @Override
-                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                    holder.imageView.setImageBitmap(response.getBitmap());
-                }
+            if (current.Response_icon != null)
+                holder.response.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), setResponse(current.Response_icon)));
 
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    holder.imageView.setImageResource(R.drawable.avatar_default);
+            if (file.exists()) {
+                try {
+                    holder.imageView.setImageBitmap(BitmapFactory.decodeFile(file.toString()));
+                } catch (Exception e) {
+                    Log.d("Image Error", e.toString());
                 }
-            });
+            } else {
+                String getRealImageName = Uri.encode(current.image);
+                imageLoader.get(imageUrl + getRealImageName, new ImageLoader.ImageListener() {
+                    @Override
+                    public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                        holder.imageView.setImageBitmap(response.getBitmap());
+                    }
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        holder.imageView.setImageResource(R.drawable.avatar_default);
+                    }
+                });
+            }
+            Date getTime = new Date(current.time);
+            long milli = getTime.getTime();
+
+            holder.time.setText(net.beepinc.vip.json.TimeUtils.setAgo(milli));
+            holder.duration.setText(SetMedia(current.voicenote));
         }
-        Date getTime = new Date(current.time);
-        long milli = getTime.getTime();
-
-        holder.time.setText(net.beepinc.vip.json.TimeUtils.setAgo(milli));
-        holder.duration.setText(SetMedia(current.voicenote));
 
     }
 
@@ -168,7 +173,7 @@ public class mypost_adapters extends RecyclerView.Adapter<mypost_adapters.MyPost
     }
 
     public interface LongClickListener{
-        public void onLongClickListener(View view,int position);
+        public void onLongClickListener(View view,int position,String instruct);
     }
 
     public interface mClickListener{
@@ -267,7 +272,11 @@ public class mypost_adapters extends RecyclerView.Adapter<mypost_adapters.MyPost
                 @Override
                 public boolean onLongClick(View v) {
                     if(lc != null) {
-                        lc.onLongClickListener(v, getPosition());
+                        if(what_to_do == "post") {
+                            lc.onLongClickListener(v, getPosition(), "post");
+                        }else if(what_to_do == "fav")  {
+                            lc.onLongClickListener(v, getPosition(), "fav");
+                        }
                     }
                     return true;
                 }

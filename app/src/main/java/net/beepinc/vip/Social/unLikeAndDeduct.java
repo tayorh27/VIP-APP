@@ -18,6 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by tayo on 12/25/2015.
  */
@@ -41,14 +43,22 @@ public class unLikeAndDeduct {
     public String removeLikeUser(String users){
         String newUsers="";
         like_users = users.split(",");
+        ArrayList<String> lu = new ArrayList<>();
+
+        for(int j = 0; j < like_users.length; j++){
+            lu.add(like_users[j]);
+        }
+
+
         for(int i = 0; i < like_users.length; i++){
             if(like_users[i].contentEquals(username)){
-                like_users[i].replace(username,"");
+                //like_users[i].replace(username,"");
+                lu.remove(i);
             }
         }
 
-        for(int j = 0; j < like_users.length; j++){
-            newUsers += like_users[j]+",";
+        for(int j = 0; j < lu.size(); j++){
+            newUsers += lu.get(j)+",";
         }
         return newUsers;
     }
@@ -76,8 +86,12 @@ public class unLikeAndDeduct {
                     updateVoiceNoteLikeUsers(removeLikeUser(likeUsers));
 
                     int number_of_likes = object.getInt("number_of_likes");
-                    int newNumberoflikes = number_of_likes -1;
-                    updateVoicenoteCommentsTotal(newNumberoflikes);
+                    if(number_of_likes >= 0) {
+                        int newNumberoflikes = number_of_likes - 1;
+                        updateVoicenoteCommentsTotal(newNumberoflikes);
+                    }else {
+                        textView.setTextColor(context.getResources().getColor(R.color.list_item_title));
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();

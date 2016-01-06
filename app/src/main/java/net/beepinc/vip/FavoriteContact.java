@@ -120,7 +120,7 @@ public class FavoriteContact extends Fragment implements favorites_adapters.Clic
         swipeRefreshLayout = (SwipeRefreshLayout) row.findViewById(R.id.swipe);
         progressBar = (ProgressBar)row.findViewById(R.id.progressBar);
         userLocalStore = new UserLocalStore(getActivity());
-        adapters = new favorites_adapters(getActivity());
+        adapters = new favorites_adapters(getActivity(),"show");
         User user = userLocalStore.getLoggedUser();
         isConn = new InternetChecking(getActivity());
         icheck = isConn.isConnectedToInternet();

@@ -109,6 +109,7 @@ public class Utils {
             progressDialog.setMessage("Downloading voicenote...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(true);
             progressDialog.show();
         }
 
@@ -159,6 +160,14 @@ public class Utils {
             Toast.makeText(context, "Voicenote Downloaded!", Toast.LENGTH_LONG).show();
         }
     }
+    /*
+
+    /storage/sdcard0/download/Derin_voicenote_2016_0_5_86301.3gpDerin_voicenote_2016_0_5_86301.3gp:
+     output = /storage/sdcard0/download/Derin_voicenote_2016_0_5_86301.3gp
+    inputName = Derin_voicenote_2016_0_5_86301.3gp
+    path = /storage/sdcard0/Music/vip-voicenotes
+
+     */
 
     public void copyFile(String inputPath, String inputFile, String outputPath) {
 
@@ -174,7 +183,7 @@ public class Utils {
             }
 
 
-            in = new FileInputStream(inputPath + inputFile);
+            in = new FileInputStream(inputPath + "");//inputFile
             out = new FileOutputStream(outputPath + inputFile);
 
             byte[] buffer = new byte[1024];

@@ -60,7 +60,7 @@ public class MyPosts extends Fragment implements SwipeRefreshLayout.OnRefreshLis
         recyclerView = (RecyclerView)row.findViewById(R.id.mypostView);
         tv = (TextView)row.findViewById(R.id.my_post_tv);
         swipeRefreshLayout = (SwipeRefreshLayout)row.findViewById(R.id.swipe);
-        adapters = new mypost_adapters(getActivity(),this,this,recyclerView);
+        adapters = new mypost_adapters(getActivity(),this,this,recyclerView,"post");
         userLocalStore = new UserLocalStore(getActivity());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapters);
@@ -116,26 +116,28 @@ public class MyPosts extends Fragment implements SwipeRefreshLayout.OnRefreshLis
     }
 
     @Override
-    public void onLongClickListener(View view, int position) {
-        final mypost_information current = customList.get(position);
-        final AlertDialog ad = new AlertDialog.Builder(getActivity()).create();
-        ad.setTitle("Delete Alert");
-        ad.setMessage("Are you sure you want to remove this voicenote?");
-        ad.setButton("YES", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                MyApplication.getWriteableDatabaseForMyPosts().deleteDatabase(current.get_id);
-                ad.dismiss();
-                loadPosts();
-            }
-        });
-        ad.setButton2("NO", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ad.dismiss();
-            }
-        });
-        ad.show();
+    public void onLongClickListener(View view, int position,String instruct) {
+        if(instruct == "post") {
+            final mypost_information current = customList.get(position);
+            final AlertDialog ad = new AlertDialog.Builder(getActivity()).create();
+            ad.setTitle("Delete Alert");
+            ad.setMessage("Are you sure you want to remove this voicenote?");
+            ad.setButton("YES", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    MyApplication.getWriteableDatabaseForMyPosts().deleteDatabase(current.get_id);
+                    ad.dismiss();
+                    loadPosts();
+                }
+            });
+            ad.setButton2("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ad.dismiss();
+                }
+            });
+            ad.show();
+        }
     }
 
     private String VoiceDuration(String vn){
@@ -180,6 +182,11 @@ public class MyPosts extends Fragment implements SwipeRefreshLayout.OnRefreshLis
                 Toast.makeText(getActivity(), "retrying", Toast.LENGTH_LONG).show();
                 MyPostCustomList postCustomList = new MyPostCustomList(getActivity(), current.caption, current.voicenote, current.image, current.mobile, current.username, current.time, file.toString(), "full",dur);
                 postCustomList.doUploadFileForRetry(current.get_id,recyclerView);
+                try {
+                    loadPosts();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }else{
             Toast.makeText(getActivity(), "voicenote does not exist on sdcard", Toast.LENGTH_LONG).show();

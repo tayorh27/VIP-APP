@@ -109,7 +109,7 @@ public class RecordingActivity extends ActionBarActivity {
         userLocalStore = new UserLocalStore(RecordingActivity.this);
         uploadings = new Uploadings();
         displayText.setVisibility(View.GONE);
-        adapter = new mypost_adapters(this,null,null,null);
+        adapter = new mypost_adapters(this,null,null,null,"");
 
         if (!hasMicrophone()) {
             speak.setEnabled(false);
@@ -163,8 +163,11 @@ public class RecordingActivity extends ActionBarActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkRecord || hasUpload)
+                if(checkRecord || hasUpload) {
                     upload_to_server();
+                }else {
+                    Toast.makeText(RecordingActivity.this, "Nothing to upload", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -218,46 +221,52 @@ public class RecordingActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == FILE_SELECT_CODE && resultCode == RESULT_OK && null != data){
-            Uri getUri = data.getData();
-            String[] projection = {"_data"};
-            Cursor cursor = getContentResolver().query(getUri, projection, null, null, null, null);
-            cursor.moveToFirst();
+            try {
+                Uri getUri = data.getData();
+                String[] projection = {"_data"};
+                Cursor cursor = getContentResolver().query(getUri, projection, null, null, null, null);
+                cursor.moveToFirst();
 
-            int columnIndex = cursor.getColumnIndex(projection[0]);
-            String iniPath = cursor.getString(columnIndex);
-            String getExtension = iniPath.substring(iniPath.lastIndexOf("."));
-            switch (getExtension){
-                case ".3gp":
-                case ".3GP":
-                case ".aac":
-                case ".AAC":
-                case ".mpeg4":
-                case ".MPEG4":
-                case ".mp3":
-                    if(_length < 60000) {
+                int columnIndex = cursor.getColumnIndex(projection[0]);
+                String iniPath = cursor.getString(columnIndex);
+                String getExtension = iniPath.substring(iniPath.lastIndexOf("."));
+                switch (getExtension) {
+                    case ".3gp":
+                    case ".3GP":
+                    case ".aac":
+                    case ".AAC":
+                    case ".mpeg4":
+                    case ".MPEG4":
+                    case ".mp3":
                         getVoiceDuration(iniPath);
-                        outputPath = iniPath;
-                        //copy file to voicenote folder
-                        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC+"/vip-voicenotes/");
-                        File file = new File(outputPath);
-                        String inputName = "file_to_upload_"+file.getName();
-                        utils.copyFile(outputPath,inputName,path.toString());
-                        hasUpload = true;
-                        Filename = inputName;
-                        Toast.makeText(RecordingActivity.this, "Voicenote ready for upload. Length = "+_length, Toast.LENGTH_LONG).show();
-                    }else {
-                        Toast.makeText(RecordingActivity.this, "Audio duration is greater than 1min", Toast.LENGTH_LONG).show();
-                        if(!checkRecord) {
-                            outputPath = "";
-                            setDuration = "";
-                            _length = 0;
-                            hasUpload = false;
+                        if (_length <= 61000) {
+                            outputPath = iniPath;
+                            //copy file to voicenote folder
+                            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC + "/vip-voicenotes/");
+                            File file = new File(outputPath);
+                            String inputName = file.getName();
+                            String _inputName = "/"+file.getName();
+                            utils.copyFile(outputPath, _inputName, path.toString());
+                            Log.e("copying details","output = "+outputPath+"\ninputName = "+inputName+"\npath = "+path.toString());
+                            hasUpload = true;
+                            Filename = inputName;
+                            Toast.makeText(RecordingActivity.this, "Voice note is ready for upload", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(RecordingActivity.this, "Audio duration is greater than 1min", Toast.LENGTH_LONG).show();
+                            if (!checkRecord) {
+                                outputPath = "";
+                                setDuration = "";
+                                _length = 0;
+                                hasUpload = false;
+                            }
                         }
-                    }
-                    break;
-                default:
-                    Toast.makeText(RecordingActivity.this, "wrong audio format.Try again", Toast.LENGTH_LONG).show();
-                    break;
+                        break;
+                    default:
+                        Toast.makeText(RecordingActivity.this, "wrong audio format.Try again", Toast.LENGTH_LONG).show();
+                        break;
+                }
+            }catch (Exception e){
+                Toast.makeText(RecordingActivity.this, "wrong audio format.Try again", Toast.LENGTH_LONG).show();//61000
             }
         }
     }
@@ -315,7 +324,7 @@ public class RecordingActivity extends ActionBarActivity {
         ArrayList<mypost_information> customData = new ArrayList<>();
         int fk = MyApplication.getWriteableDatabaseForMyPosts().getLastId();
         int id = fk+1;
-        mypost_information current = new mypost_information(id,caption, voicenote, img, mob, username, bitmap, cTime,"partial");
+        mypost_information current = new mypost_information(id,caption, voicenote, img, mob, username, bitmap, cTime,"partial","show");
         customData.add(current);
 
         MyApplication.getWriteableDatabaseForMyPosts().insertMyPost(customData, false);
@@ -388,7 +397,7 @@ public class RecordingActivity extends ActionBarActivity {
             counter++;
             displayText.setText("Recording 00:"+counter);
             handler.postDelayed(this,1000);
-            if(counter == 60){
+            if(counter == 61){
                 stopRecord();
             }
         }

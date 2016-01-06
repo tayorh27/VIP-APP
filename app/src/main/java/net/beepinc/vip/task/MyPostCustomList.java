@@ -175,7 +175,7 @@ public class MyPostCustomList {
                 ArrayList<mypost_information> customData = new ArrayList<>();
                 int fk = MyApplication.getWriteableDatabaseForMyPosts().getLastId();
                 int id = fk+1;
-                mypost_information current1 = new mypost_information(id,caption, notes, image, mobile, nUsername, "done_icon", currentDate,"partial");
+                mypost_information current1 = new mypost_information(id,caption, notes, image, mobile, nUsername, "done_icon", currentDate,"partial","show");
                 customData.add(current1);
                 MyApplication.getWriteableDatabaseForMyPosts().insertMyPost(customData, false);
                 //new Utils(context).DownloadVoiceToSDcard(notes);

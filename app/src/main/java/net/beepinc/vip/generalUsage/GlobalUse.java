@@ -12,7 +12,11 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 
+import net.beepinc.vip.Information.mypost_information;
+import net.beepinc.vip.MyApplication;
 import net.beepinc.vip.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by tayo on 10/16/2015.
@@ -37,5 +41,27 @@ public class GlobalUse {
             Toast.makeText(mTextError, R.string.error_parse, Toast.LENGTH_LONG).show();
             //TODO
         }
+    }
+
+    public static void setListForMyPost(String caption, String voicenote, String img, String mob, String username, String bitmap, String cTime,String display){
+
+        ArrayList<mypost_information> customData = new ArrayList<>();
+        int fk = MyApplication.getWriteableDatabaseForMyPosts().getLastId();
+        int id = fk+1;
+        mypost_information current = new mypost_information(id,caption, voicenote, img, mob, username, bitmap, cTime,"partial",display);
+        customData.add(current);
+
+        MyApplication.getWriteableDatabaseForMyPosts().insertMyPost(customData, false);
+    }
+
+    public static void setList(String caption, String voicenote, String img, String mob, String username, String bitmap, String cTime,String display){
+
+        ArrayList<mypost_information> customData = new ArrayList<>();
+        int fk = MyApplication.getWritableDatabaseForFavorites().getLastId();
+        int id = fk+1;
+        mypost_information current = new mypost_information(id,caption, voicenote, img, mob, username, bitmap, cTime,"partial",display);
+        customData.add(current);
+
+        MyApplication.getWritableDatabaseForFavorites().insertMyFavorites(customData, false);
     }
 }

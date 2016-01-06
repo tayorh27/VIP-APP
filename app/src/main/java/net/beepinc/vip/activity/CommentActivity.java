@@ -18,6 +18,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.view.MenuItem;
@@ -65,6 +66,7 @@ public class CommentActivity extends ActionBarActivity implements View.OnClickLi
     ArrayList<comment_information> customList = new ArrayList<>();
 
     private comment_adapters adapters;
+    Toolbar toolbar;
 
     InternetChecking isConn;
     boolean icheck = false;
@@ -92,6 +94,9 @@ public class CommentActivity extends ActionBarActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
+
+        toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
 
         AppConfig.ReplaceDefaultFont(CommentActivity.this, "DEFAULT", "avenir_light.ttf");
         save = getSharedPreferences("saveEditText",0);

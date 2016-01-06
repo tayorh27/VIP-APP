@@ -46,19 +46,23 @@ public class Parser {
 
     public static void sortAll(){
 
-        performContactTask();
+        try {
+            performContactTask();
 
-        for (int i = 0; i < cus_phones.size(); i++){
-            for (int j = 1; j < cus_phones.size(); j++){
+            for (int i = 0; i < cus_phones.size(); i++) {
+                for (int j = 1; j < cus_phones.size(); j++) {
 
-                if(PhoneNumberUtils.compare(context,cus_phones.get(i),cus_phones.get(j))){//cus_phones.get(i).contentEquals(cus_phones.get(j))){
-                    cus_phones.remove(j);
+                    if (PhoneNumberUtils.compare(context, cus_phones.get(i), cus_phones.get(j))) {//cus_phones.get(i).contentEquals(cus_phones.get(j))){
+                        cus_phones.remove(j);
+                    }
+
                 }
-
             }
-        }
-        for (int k = 0; k < cus_phones.size(); k++){
-            c_phones.add(cus_phones.get(k));
+            for (int k = 0; k < cus_phones.size(); k++) {
+                c_phones.add(cus_phones.get(k));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

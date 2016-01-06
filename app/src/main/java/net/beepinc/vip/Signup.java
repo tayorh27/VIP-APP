@@ -40,6 +40,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
+import net.beepinc.vip.Information.mypost_information;
 import net.beepinc.vip.activity_adapters.Security_Adapter;
 import net.beepinc.vip.generalUsage.GlobalUse;
 import net.beepinc.vip.helper.ParseUtils;
@@ -61,6 +62,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -375,7 +377,7 @@ public class Signup extends ActionBarActivity {
         pdd.setMessage("Creating user account");
         pdd.setCancelable(false);
         pdd.show();
-
+        ParseUtils.subscribeWithEmail(username);
         String web_url_reg = AppConfig.web_url+"Register.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, web_url_reg, new Response.Listener<String>() {
@@ -393,7 +395,8 @@ public class Signup extends ActionBarActivity {
                 }
                 if(success == 1){
                     addContact(mobile,username);
-                    ParseUtils.subscribeWithEmail(username);///// it is here //////
+//                    GlobalUse.setList("caption", "voicenote", "image", "mobile", "username", "", "time","hide");
+//                    GlobalUse.setListForMyPost("caption", "voicenote", "image", "mobile", "username", "", "time","hide");
                     Toast.makeText(Signup.this,"Account successfully created\nLogin now.", Toast.LENGTH_LONG).show();
                     pdd.dismiss();
                     startActivity(new Intent(Signup.this, Loginview.class));

@@ -2,8 +2,8 @@
 <resources>
 
     <declare-styleable name="customfont">
-        <attr name="android:fontFamily"/>
-        <attr name="android:textStyle"/>
+        <attr name="android:fontFamily" />
+        <attr name="android:textStyle" />
     </declare-styleable>
 
     <string name="app_name">VIP</string>
@@ -19,7 +19,6 @@
         <item>Add to favorites</item>
         <item>View like users</item>
     </string-array>
-
     <string-array name="category">
         <item>Default</item>
         <item>Student</item>
@@ -60,5 +59,8 @@
     <string name="title_activity_forgot_password">ForgotPassword</string>
     <string name="title_activity_reset_password">ResetPassword</string>
     <string name="title_activity_favorite_contacts">Your Contacts</string>
+    <string name="title_activity_favorites">Your Favorites Posts</string>
+    <string name="title_activity_search">Search User</string>
+    <string name="title_activity_like_users">Like Users</string>
 
 </resources>

@@ -38,12 +38,14 @@ public class favorites_adapters extends RecyclerView.Adapter<favorites_adapters.
     private ImageLoader imageLoader;
     private Clicklistener clicklistener;
     Context context;
+    String display;
 
-    public favorites_adapters(Context context){
+    public favorites_adapters(Context context,String display){
         this.context = context;
         inflater = LayoutInflater.from(context);
         volleySingleton = VolleySingleton.getInstance();
         imageLoader = volleySingleton.getImageLoader();
+        this.display = display;
     }
 
     public void setList(ArrayList<favorites_information> infos){
@@ -67,7 +69,12 @@ public class favorites_adapters extends RecyclerView.Adapter<favorites_adapters.
     public void onBindViewHolder(final myViewHolder viewHolder, int i) {
         favorites_information current = informations.get(i);
         viewHolder.textView.setText(current.title);
-        viewHolder.textView1.setText(current.subtitle);
+        if(display.contentEquals("show")) {
+            viewHolder.textView1.setText(current.subtitle);
+        }else if(display.contentEquals("hide")){
+            viewHolder.textView1.setText("");
+            viewHolder.textView.setPadding(0,36,0,0);
+        }
         viewHolder.textView2.setText(current.category);
 
         final String imageUrl = current.image_name;

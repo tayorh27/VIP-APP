@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import net.beepinc.vip.LocalDBs.FavDatabase;
+import net.beepinc.vip.LocalDBs.FavoritesPostDatabase;
 import net.beepinc.vip.LocalDBs.MyPostDatabase;
 import net.beepinc.vip.helper.ParseUtils;
 
@@ -18,6 +19,7 @@ public class MyApplication extends Application {
     private static MyApplication sInstance;
     private static FavDatabase favDatabase;
     private static MyPostDatabase myPostDatabase;
+    private static FavoritesPostDatabase favoritesPostDatabase;
 
     @Override
     public void onCreate() {
@@ -53,6 +55,14 @@ public class MyApplication extends Application {
             myPostDatabase = new MyPostDatabase(getAppContext());
         }
         return myPostDatabase;
+
+    }
+
+    public synchronized static FavoritesPostDatabase getWritableDatabaseForFavorites(){
+        if (favoritesPostDatabase == null){
+            favoritesPostDatabase = new FavoritesPostDatabase(getAppContext());
+        }
+        return favoritesPostDatabase;
 
     }
 }

@@ -48,6 +48,8 @@ import net.beepinc.vip.SocialCallbacks.LoadNumberOfLikesListener;
 import net.beepinc.vip.User;
 import net.beepinc.vip.UserLocalStore;
 import net.beepinc.vip.activity.CommentActivity;
+import net.beepinc.vip.activity.LikeUsersActivity;
+import net.beepinc.vip.generalUsage.GlobalUse;
 import net.beepinc.vip.json.TimeUtils;
 import net.beepinc.vip.json.Utils;
 import net.beepinc.vip.network.VolleySingleton;
@@ -293,7 +295,8 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
             switch (v.getId()) {
                 case R.id.overflow:
                     recent_post_information cur = informations.get(getPosition());
-                    showDialog(cur);
+                    User user1 = userLocalStore.getLoggedUser();
+                    showDialog(cur,user1);
                     break;
                 case R.id.custom_recentpost_dp:
                     displayDP();
@@ -323,7 +326,11 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
             }
         }
 
-        private void showDialog(recent_post_information rpi) {
+        private void showDialog(final recent_post_information rpi, final User user) {
+            final Dialog dialog = new Dialog(context);
+            dialog.setTitle("Other options");
+            dialog.setCancelable(true);
+            dialog.setCanceledOnTouchOutside(true);
             LayoutInflater inflater1 = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View custom_view = inflater1.inflate(R.layout.custom_dialog,(ViewGroup)itemView.findViewById(R.id.root),false);
             ListView lv = (ListView)custom_view.findViewById(R.id.custom_dialog_list);
@@ -333,19 +340,23 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
                     switch (position){
                         case 0:
                             //add to favorites
-                            Toast.makeText(context,"add to favorites click",Toast.LENGTH_LONG).show();
+                            GlobalUse.setList(rpi.caption, rpi.voicenote, rpi.image, user.mob, rpi.username, "", rpi.time,"show");
+                            Toast.makeText(context,"added to favorites list",Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
                             break;
                         case 1:
                             //view like users
-                            Toast.makeText(context,"view like users click",Toast.LENGTH_LONG).show();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("vn",rpi.voicenote);
+                            Intent intent = new Intent(context, LikeUsersActivity.class);
+                            intent.putExtras(bundle);
+                            context.startActivity(intent);
+                            dialog.dismiss();
+                            //Toast.makeText(context,"view like users click",Toast.LENGTH_LONG).show();
                             break;
                     }
                 }
             });
-            Dialog dialog = new Dialog(context);
-            dialog.setTitle("Other options");
-            dialog.setCancelable(true);
-            dialog.setCanceledOnTouchOutside(true);
             dialog.setContentView(custom_view);
             dialog.show();
         }
@@ -487,12 +498,20 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
 
         @Override
         public void onLoadNumberOfLikesListener(ArrayList<String> n) {
-            likes.setText(n.size() +" like(s)");
+            if(n.size() >= 0) {
+                likes.setText(n.size() + " like(s)");
+            }else {
+                likes.setText(0 + " like(s)");
+            }
         }
 
         @Override
         public void onLoadNumberOfCommentsListener(ArrayList<String> n) {
-            comments.setText(n.size() +" comment(s)");
+            if(n.size() >= 0) {
+                comments.setText(n.size() + " comment(s)");
+            }else{
+                comments.setText(0 + " comment(s)");
+            }
         }
     }
 }

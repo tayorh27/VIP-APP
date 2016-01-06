@@ -267,6 +267,8 @@ public class Loginview extends ActionBarActivity {
                         userLocalStore.storeUserData(user);
                         userLocalStore.setUserLoggedIn(true);
                         progressDialog.dismiss();
+                        GlobalUse.setList("caption", "voicenote", "image", "mobile", "username", "", "time","hide");
+                        GlobalUse.setListForMyPost("caption", "voicenote", "image", "mobile", "username", "", "time","hide");
                         Intent intent = new Intent(Loginview.this, MainActivity.class);
                         startActivity(intent);
                         finish();

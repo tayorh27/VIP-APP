@@ -1,6 +1,5 @@
 package net.beepinc.vip.LocalDBs;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,23 +13,23 @@ import net.beepinc.vip.Information.mypost_information;
 import java.util.ArrayList;
 
 /**
- * Created by tayo on 10/18/2015.
+ * Created by tayo on 1/5/2016.
  */
-public class MyPostDatabase {
+public class FavoritesPostDatabase {
 
-    private FavHelper favHelper;
+    private FavoriteHelper favHelper;
     private SQLiteDatabase mDabtabase;
 
-    public MyPostDatabase(Context context) {
-        favHelper = new FavHelper(context);
+    public FavoritesPostDatabase(Context context){
+        favHelper = new FavoriteHelper(context);
         mDabtabase = favHelper.getWritableDatabase();
     }
 
-    public void insertMyPost(ArrayList<mypost_information> lists, boolean clearPrevious) {
+    public void insertMyFavorites(ArrayList<mypost_information> lists, boolean clearPrevious) {
         if (clearPrevious) {
             deleteAll();
         }
-        String sql = "INSERT INTO " + FavHelper.TABLE_NAME_MYPOST + " VALUES(?,?,?,?,?,?,?,?,?);";
+        String sql = "INSERT INTO " + FavoriteHelper.TABLE_NAME_MYFAV + " VALUES(?,?,?,?,?,?,?,?,?);";
         //compile statement and start a transaction
         SQLiteStatement statement = mDabtabase.compileStatement(sql);
         mDabtabase.beginTransaction();
@@ -53,34 +52,34 @@ public class MyPostDatabase {
         mDabtabase.endTransaction();
     }
 
-    public ArrayList<mypost_information> getAllMyPosts(String mobile) {
+    public ArrayList<mypost_information> getAllMyFavorites(String mobile) {
         ArrayList<mypost_information> currentData = new ArrayList<>();
 
         String[] columns = {
-                FavHelper.COLUMN_UID,
-                FavHelper.COLUMN_CAPTION,
-                FavHelper.COLUMN_VOICE,
-                FavHelper.COLUMN_IMAGE,
-                FavHelper.COLUMN_MOBILE,
-                FavHelper.COLUMN_USERNAME,
-                FavHelper.COLUMN_STATUS,
-                FavHelper.COLUMN_TIME,
-                FavHelper.COLUMN_DISPLAY
+                FavoriteHelper.COLUMN_UID,
+                FavoriteHelper.COLUMN_CAPTION,
+                FavoriteHelper.COLUMN_VOICE,
+                FavoriteHelper.COLUMN_IMAGE,
+                FavoriteHelper.COLUMN_MOBILE,
+                FavoriteHelper.COLUMN_USERNAME,
+                FavoriteHelper.COLUMN_STATUS,
+                FavoriteHelper.COLUMN_TIME,
+                FavoriteHelper.COLUMN_DISPLAY
         };
-        Cursor cursor = mDabtabase.query(FavHelper.TABLE_NAME_MYPOST, columns, null, null, null, null, null);
+        Cursor cursor = mDabtabase.query(FavoriteHelper.TABLE_NAME_MYFAV, columns, null, null, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
             while (cursor.moveToNext()) {
                 mypost_information current = new mypost_information();
-                if(cursor.getString(cursor.getColumnIndex(FavHelper.COLUMN_MOBILE)).contentEquals(mobile)) {
-                    current.get_id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(FavHelper.COLUMN_UID)));
-                    current.caption = cursor.getString(cursor.getColumnIndex(FavHelper.COLUMN_CAPTION));
-                    current.voicenote = cursor.getString(cursor.getColumnIndex(FavHelper.COLUMN_VOICE));
-                    current.image = cursor.getString(cursor.getColumnIndex(FavHelper.COLUMN_IMAGE));
-                    current.mobile = cursor.getString(cursor.getColumnIndex(FavHelper.COLUMN_MOBILE));
-                    current.username = cursor.getString(cursor.getColumnIndex(FavHelper.COLUMN_USERNAME));
-                    current.Response_icon = cursor.getString(cursor.getColumnIndex(FavHelper.COLUMN_STATUS));
-                    current.time = cursor.getString(cursor.getColumnIndex(FavHelper.COLUMN_TIME));
-                    current.display = cursor.getString(cursor.getColumnIndex(FavHelper.COLUMN_DISPLAY));
+                if(cursor.getString(cursor.getColumnIndex(FavoriteHelper.COLUMN_MOBILE)).contentEquals(mobile)) {
+                    current.get_id = Integer.parseInt(cursor.getString(cursor.getColumnIndex(FavoriteHelper.COLUMN_UID)));
+                    current.caption = cursor.getString(cursor.getColumnIndex(FavoriteHelper.COLUMN_CAPTION));
+                    current.voicenote = cursor.getString(cursor.getColumnIndex(FavoriteHelper.COLUMN_VOICE));
+                    current.image = cursor.getString(cursor.getColumnIndex(FavoriteHelper.COLUMN_IMAGE));
+                    current.mobile = cursor.getString(cursor.getColumnIndex(FavoriteHelper.COLUMN_MOBILE));
+                    current.username = cursor.getString(cursor.getColumnIndex(FavoriteHelper.COLUMN_USERNAME));
+                    current.Response_icon = cursor.getString(cursor.getColumnIndex(FavoriteHelper.COLUMN_STATUS));
+                    current.time = cursor.getString(cursor.getColumnIndex(FavoriteHelper.COLUMN_TIME));
+                    current.display = cursor.getString(cursor.getColumnIndex(FavoriteHelper.COLUMN_DISPLAY));
                     currentData.add(current);
                 }
             }
@@ -93,49 +92,41 @@ public class MyPostDatabase {
     public int getLastId(){
         int id = 1;
         String[] columns = {
-                FavHelper.COLUMN_UID,
-                FavHelper.COLUMN_CAPTION,
-                FavHelper.COLUMN_VOICE,
-                FavHelper.COLUMN_IMAGE,
-                FavHelper.COLUMN_MOBILE,
-                FavHelper.COLUMN_USERNAME,
-                FavHelper.COLUMN_STATUS,
-                FavHelper.COLUMN_TIME,
-                FavHelper.COLUMN_DISPLAY
+                FavoriteHelper.COLUMN_UID,
+                FavoriteHelper.COLUMN_CAPTION,
+                FavoriteHelper.COLUMN_VOICE,
+                FavoriteHelper.COLUMN_IMAGE,
+                FavoriteHelper.COLUMN_MOBILE,
+                FavoriteHelper.COLUMN_USERNAME,
+                FavoriteHelper.COLUMN_STATUS,
+                FavoriteHelper.COLUMN_TIME,
+                FavoriteHelper.COLUMN_DISPLAY
         };
-        Cursor cursor = mDabtabase.query(FavHelper.TABLE_NAME_MYPOST, columns, null, null, null, null, null);
+        Cursor cursor = mDabtabase.query(FavoriteHelper.TABLE_NAME_MYFAV, columns, null, null, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
             cursor.moveToLast();
             id = cursor.getInt(0);
             //cursor.close();
         }
-        Log.e("gotID", "my id is "+id);
+        Log.e("gotID", "my id is " + id);
         return id;
     }
 
     public void deleteAll() {
-        mDabtabase.delete(FavHelper.TABLE_NAME_MYPOST, null, null);
-    }
-
-    public void updateDatabase(int foreignKey, String newBitmap) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(FavHelper.COLUMN_STATUS, newBitmap);
-        mDabtabase.update(FavHelper.TABLE_NAME_MYPOST, contentValues, FavHelper.COLUMN_UID + "="+ foreignKey, null);//
-        Log.e("UPDATE", "database updated to "+newBitmap);
+        mDabtabase.delete(FavoriteHelper.TABLE_NAME_MYFAV, null, null);
     }
 
     public void deleteDatabase(int id) {
-        mDabtabase.delete(FavHelper.TABLE_NAME_MYPOST,FavHelper.COLUMN_UID + "="+ id,null);
+        mDabtabase.delete(FavoriteHelper.TABLE_NAME_MYFAV,FavoriteHelper.COLUMN_UID + "="+ id,null);
     }
 
+    public class FavoriteHelper extends SQLiteOpenHelper {
 
-    public class FavHelper extends SQLiteOpenHelper {
-
-        private Context mcontext;
-        private static final String DB_NAME = "mypost_db";
+        private Context m_context;
+        private static final String DB_NAME = "favoritesList_db";
         private static final int DB_VERSION = 1;
 
-        public static final String TABLE_NAME_MYPOST = "myposts";
+        public static final String TABLE_NAME_MYFAV = "favorites_list";
         public static final String COLUMN_UID = "_id";
 
         public static final String COLUMN_CAPTION = "caption";
@@ -147,7 +138,7 @@ public class MyPostDatabase {
         public static final String COLUMN_TIME = "created_time";
         public static final String COLUMN_DISPLAY = "display";
 
-        private static final String CREATE_TABLE_MYPOST = "CREATE TABLE " + TABLE_NAME_MYPOST + "(" +
+        private static final String CREATE_TABLE_MYFAV = "CREATE TABLE " + TABLE_NAME_MYFAV + "(" +
                 COLUMN_UID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COLUMN_CAPTION + " TEXT," +
                 COLUMN_VOICE + " TEXT," +
@@ -160,15 +151,15 @@ public class MyPostDatabase {
                 ");";
 
 
-        public FavHelper(Context context) {
+        public FavoriteHelper(Context context) {
             super(context, DB_NAME, null, DB_VERSION);
-            mcontext = context;
+            m_context = context;
         }
 
         @Override
         public void onCreate(SQLiteDatabase db) {
             try {
-                db.execSQL(CREATE_TABLE_MYPOST);
+                db.execSQL(CREATE_TABLE_MYFAV);
             } catch (SQLiteException e) {
                 e.printStackTrace();
             }
@@ -177,7 +168,7 @@ public class MyPostDatabase {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             try {
-                db.execSQL(" DROP TABLE " + TABLE_NAME_MYPOST + " IF EXISTS;");
+                db.execSQL(" DROP TABLE " + TABLE_NAME_MYFAV + " IF EXISTS;");
                 onCreate(db);
             } catch (SQLiteException e) {
                 e.printStackTrace();

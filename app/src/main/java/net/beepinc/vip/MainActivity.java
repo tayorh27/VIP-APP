@@ -39,7 +39,9 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import net.beepinc.vip.activity.FavoriteContacts;
+import net.beepinc.vip.activity.FavoritesActivity;
 import net.beepinc.vip.activity.RecordingActivity;
+import net.beepinc.vip.activity.SearchActivity;
 import net.beepinc.vip.services.MyService;
 
 import java.io.IOException;
@@ -190,12 +192,19 @@ public class MainActivity extends ActionBarActivity {
         }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            //change later
             userLocalStore.clearUserDatabase();
             startActivity(new Intent(MainActivity.this, Homeview.class));
             finish();
         }
         if (id == R.id.edit_profile){
             startActivity(new Intent(MainActivity.this, UpdateActivity.class));
+        }
+        if(id == R.id.action_favorites){
+            startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
+        }
+        if(id == R.id.action_search){
+            startActivity(new Intent(MainActivity.this, SearchActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
@@ -221,6 +230,8 @@ public class MainActivity extends ActionBarActivity {
             super(fm);
             mTabs = getResources().getStringArray(R.array.mtabs);
         }
+
+
 
         @Override
         public int getCount() {
