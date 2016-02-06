@@ -378,13 +378,13 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
             recent_post_information current = informations.get(getPosition());
             if (likes.getTextColors().getDefaultColor() != context.getResources().getColor(R.color.like)) {
                 new Likes(context, likes, current.voicenote, user.image, user.mob, user.uname, "liked" + user.uname, "1").startTask();
-                new TaskLoadNumberOfLikes(this,current.voicenote).execute();
-                new TaskLoadNumberOfComments(this,current.voicenote).execute();
+                //new TaskLoadNumberOfLikes(this,current.voicenote).execute();
+                //new TaskLoadNumberOfComments(this,current.voicenote).execute();
                 //likes.setText(nlikes.size() + "like(s)");
             } else if (likes.getTextColors().getDefaultColor() == context.getResources().getColor(R.color.like)){
                 new unLikeAndDeduct(context,current.voicenote,user.uname,likes).startTask();
-                new TaskLoadNumberOfLikes(this,current.voicenote).execute();
-                new TaskLoadNumberOfComments(this,current.voicenote).execute();
+                //new TaskLoadNumberOfLikes(this,current.voicenote).execute();
+                //new TaskLoadNumberOfComments(this,current.voicenote).execute();
                 //Toast.makeText(context, "voicenote liked already!", Toast.LENGTH_LONG).show();
             }
         }
@@ -498,20 +498,20 @@ public class recentposts_adapters extends RecyclerView.Adapter<recentposts_adapt
 
         @Override
         public void onLoadNumberOfLikesListener(ArrayList<String> n) {
-            if(n.size() >= 0) {
-                likes.setText(n.size() + " like(s)");
-            }else {
-                likes.setText(0 + " like(s)");
-            }
+//            if(!n.isEmpty()) {
+//               // likes.setText(n.size() + " like(s)");
+//            }//else {
+////                likes.setText(0 + " like(s)");
+////            }
         }
 
         @Override
         public void onLoadNumberOfCommentsListener(ArrayList<String> n) {
-            if(n.size() >= 0) {
-                comments.setText(n.size() + " comment(s)");
-            }else{
-                comments.setText(0 + " comment(s)");
-            }
+//            if(n.size() >= 0) {
+//                comments.setText(n.size() + " comment(s)");
+//            }else{
+//                comments.setText(0 + " comment(s)");
+//            }
         }
     }
 }

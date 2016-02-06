@@ -62,5 +62,6 @@
     <string name="title_activity_favorites">Your Favorites Posts</string>
     <string name="title_activity_search">Search User</string>
     <string name="title_activity_like_users">Like Users</string>
+    <string name="title_activity_user">UserActivity</string>
 
 </resources>

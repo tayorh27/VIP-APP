@@ -106,7 +106,7 @@ public class Likes {
                 try {
                     JSONObject object = response.getJSONObject(0);
                     String likeUsers = object.getString("likeUsers");
-                    String newLikeUsers = String.valueOf(new StringBuilder().append(likeUsers+""+username+","));
+                    String newLikeUsers = String.valueOf(new StringBuilder().append(likeUsers+username+","));
                     updateVoiceNoteLikeUsers(newLikeUsers);
 
 
@@ -121,7 +121,7 @@ public class Likes {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                GlobalUse.handleVolleyError(error,context);
             }
         });
 
@@ -140,7 +140,7 @@ public class Likes {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                GlobalUse.handleVolleyError(error,context);
             }
         });
 
@@ -149,7 +149,7 @@ public class Likes {
 
     }
 
-    private void updateVoicenoteCommentsTotal(int newNumberoflikes) {
+    private void updateVoicenoteCommentsTotal(final int newNumberoflikes) {
 
         String url = AppConfig.web_url+"commentNlikes/updateLikeNumber.php?notes="+post+"&number_of_likes="+newNumberoflikes;
 
@@ -160,6 +160,11 @@ public class Likes {
                 try {
                     JSONObject object = new JSONObject(response);
                     success = object.getInt("success");
+                    if(success == 1){
+                        String getCurrentText = textView.getText().toString();
+                        int number = Integer.parseInt(getCurrentText.substring(0, getCurrentText.indexOf(" ")));
+                        textView.setText(newNumberoflikes + "like(s)");
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -167,7 +172,7 @@ public class Likes {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                GlobalUse.handleVolleyError(error,context);
             }
         });
         requestQueue.add(stringRequest);

@@ -547,9 +547,11 @@ public class UpdateActivity extends ActionBarActivity {
                     success = object.getInt("success");
                     if(success == 1){
                         //userLocalStore.clearUserDatabase();
+                        User newUser = new User(Id,finalNew_username,finalNew_mobile,finalNew_image,finalNew_category,finalNew_password,finalNew_sq,finalNew_sa);
+                        userLocalStore.storeUserData(newUser);
                         Toast.makeText(UpdateActivity.this,"Profile successfully updated\nLogin again.", Toast.LENGTH_LONG).show();
                         pdd.dismiss();
-                        startActivity(new Intent(UpdateActivity.this, Loginview.class));
+                        startActivity(new Intent(UpdateActivity.this, MainActivity.class));
                         finish();
                     }else{
                         Toast.makeText(UpdateActivity.this, "Failed to updated profile\nTry again.", Toast.LENGTH_LONG).show();

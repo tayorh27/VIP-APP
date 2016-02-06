@@ -1,6 +1,7 @@
 package net.beepinc.vip.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,6 +34,7 @@ public class SearchActivity extends ActionBarActivity implements favorites_adapt
     ProgressBar progressBar;
     favorites_adapters adapters;
     Toolbar toolbar;
+    private ArrayList<favorites_information> customList = new ArrayList<>();
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -87,6 +89,19 @@ public class SearchActivity extends ActionBarActivity implements favorites_adapt
     @Override
     public void ItemClick(View view, int Position) {
         //open new activity
+        String name = customList.get(Position).title;
+        String category = customList.get(Position).category;
+        String image = customList.get(Position).image_name;
+
+        Intent intent = new Intent(SearchActivity.this,UserActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("uname",name);
+        bundle.putString("ucategory",category);
+        bundle.putString("uimage",image);
+
+        intent.putExtras(bundle);
+        startActivity(intent);
+
     }
 
     @Override
@@ -97,6 +112,7 @@ public class SearchActivity extends ActionBarActivity implements favorites_adapt
             progressBar.setVisibility(View.GONE);
         }
         adapters.setList(list);
+        customList = list;
         progressBar.setVisibility(View.GONE);
         tv.setVisibility(View.GONE);
     }

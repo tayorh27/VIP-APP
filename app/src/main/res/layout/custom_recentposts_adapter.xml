@@ -115,7 +115,7 @@
             android:layout_alignRight="@id/custom_favorite_text"
             android:layout_marginRight="5dip"
             android:gravity="right"
-            android:text="5:45"
+            android:text="30secs ago"
             android:textColor="#00796b"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -184,6 +184,13 @@
 
 
         <!-- Rightend Arrow -->
+        <!--<ImageView-->
+            <!--android:id="@+id/attachedImage"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="72dip"-->
+            <!--android:layout_marginTop="5dip"-->
+            <!--android:layout_below="@+id/custom_likes"-->
+            <!--android:src="@drawable/button_action_selector"/>-->
 
 
 

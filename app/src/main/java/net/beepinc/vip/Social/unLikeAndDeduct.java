@@ -12,6 +12,7 @@ import com.android.volley.toolbox.StringRequest;
 
 import net.beepinc.vip.AppConfig;
 import net.beepinc.vip.R;
+import net.beepinc.vip.generalUsage.GlobalUse;
 import net.beepinc.vip.network.VolleySingleton;
 
 import org.json.JSONArray;
@@ -42,23 +43,27 @@ public class unLikeAndDeduct {
 
     public String removeLikeUser(String users){
         String newUsers="";
-        like_users = users.split(",");
-        ArrayList<String> lu = new ArrayList<>();
+        try {
+            like_users = users.split(",");
+            ArrayList<String> lu = new ArrayList<>();
 
-        for(int j = 0; j < like_users.length; j++){
-            lu.add(like_users[j]);
-        }
-
-
-        for(int i = 0; i < like_users.length; i++){
-            if(like_users[i].contentEquals(username)){
-                //like_users[i].replace(username,"");
-                lu.remove(i);
+            for (int j = 0; j < like_users.length; j++) {
+                lu.add(like_users[j]);
             }
-        }
 
-        for(int j = 0; j < lu.size(); j++){
-            newUsers += lu.get(j)+",";
+
+            for (int i = 0; i < like_users.length; i++) {
+                if (like_users[i].contentEquals(username)) {
+                    //like_users[i].replace(username,"");
+                    lu.remove(i);
+                }
+            }
+
+            for (int j = 0; j < lu.size(); j++) {
+                newUsers += lu.get(j) + ",";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return newUsers;
     }
@@ -100,7 +105,7 @@ public class unLikeAndDeduct {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                GlobalUse.handleVolleyError(error,context);
             }
         });
 
@@ -119,7 +124,7 @@ public class unLikeAndDeduct {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                GlobalUse.handleVolleyError(error, context);
             }
         });
 
@@ -128,11 +133,11 @@ public class unLikeAndDeduct {
 
     }
 
-    private void updateVoicenoteCommentsTotal(int newNumberoflikes) {
+    private void updateVoicenoteCommentsTotal(final int newNumberoflikes) {
 
         String url = AppConfig.web_url+"commentNlikes/updateLikeNumber.php?notes="+post+"&number_of_likes="+newNumberoflikes;
 
-        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
+        final StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 int success = 0;
@@ -140,6 +145,11 @@ public class unLikeAndDeduct {
                     JSONObject object = new JSONObject(response);
                     success = object.getInt("success");
                     if(success == 1){
+                        String getCurrentText = textView.getText().toString();
+                        int number = Integer.parseInt(getCurrentText.substring(0, getCurrentText.indexOf(" ")));
+                        if(number > 0){
+                            textView.setText(newNumberoflikes + "like(s)");
+                        }
                         textView.setTextColor(context.getResources().getColor(R.color.list_item_title));
                     }
                 } catch (JSONException e) {
@@ -149,7 +159,7 @@ public class unLikeAndDeduct {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                GlobalUse.handleVolleyError(error,context);
             }
         });
         requestQueue.add(stringRequest);

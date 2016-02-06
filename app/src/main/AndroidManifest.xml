@@ -147,6 +147,11 @@
         <activity
             android:name=".activity.LikeUsersActivity"
             android:label="@string/title_activity_like_users"
+            android:theme="@style/NoActionBar" >
+        </activity>
+        <activity
+            android:name=".activity.UserActivity"
+            android:label="@string/title_activity_user"
             android:theme="@style/NoActionBar">
         </activity>
     </application>

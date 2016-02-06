@@ -128,6 +128,8 @@ public class MyPostCustomList {
 
     private void Upload_to_Database() {
 
+        final User user = userLocalStore.getLoggedUser();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, web_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -157,6 +159,7 @@ public class MyPostCustomList {
                 params.put("time",currentDate);
                 params.put("uploaded", up);
                 params.put("duration",duration);
+                params.put("user_id_fk",user.id+"");
                 return params;
             }
         };
@@ -247,6 +250,8 @@ public class MyPostCustomList {
                         //int fk = MyApplication.getWriteableDatabaseForMyPosts().getLastId();
                         MyApplication.getWriteableDatabaseForMyPosts().updateDatabase(id, "done_icon");
                         Snackbar.make(recyclerView,"Voicenote posted",Snackbar.LENGTH_LONG).show();
+                    }else if (success == 0){
+                        Snackbar.make(recyclerView,"Update failed",Snackbar.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

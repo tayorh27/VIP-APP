@@ -318,7 +318,7 @@ public class CommentActivity extends ActionBarActivity implements View.OnClickLi
             handler.postDelayed(this, 100);
             if (!mediaPlayer.isPlaying()){//!mediaPlayer.isPlaying()) {
                 gButton.setTag("play");
-                gProgressBar.setMax(0);
+                //gProgressBar.setMax(0);
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.play_icon);
                 Drawable d = new BitmapDrawable(bitmap);
                 gButton.setBackground(d);
